@@ -1,6 +1,10 @@
 /* Service worker de Ritmo de Remada: guarda la app completa para usarla sin conexión.
-   Sube VERSION cada vez que cambies archivos para que los móviles descarguen la versión nueva. */
-const VERSION = 'ritmo-remada-v6';
+   Todas las apps de lsantome.github.io comparten el origen, y con él el almacén de cachés:
+   por eso las cachés llevan el prefijo propio (PREFIX) y este worker SOLO borra las que lo tienen.
+   VERSION se sella al construir (npm run build:pwa): scripts/version.js sustituye el sufijo por el
+   hash del commit, así que cada despliegue renueva la caché sin tocar este archivo a mano. */
+const PREFIX = 'ritmo-remada-';
+const VERSION = 'ritmo-remada-dev'; // @build
 const ASSETS = [
   './', 'index.html', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png',
@@ -15,7 +19,7 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k))))
+    caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith(PREFIX) && k !== VERSION).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });

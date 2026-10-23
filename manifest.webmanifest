@@ -5,7 +5,7 @@
   "lang": "es",
   "start_url": "./",
   "scope": "./",
-  "id": "./",
+  "id": "ritmo-remada",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#edf3f4",

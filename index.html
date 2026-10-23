@@ -349,6 +349,8 @@ button[disabled]{opacity:.35; pointer-events:none}
         </button>
       </div>
     </section>
+
+    <p class="note" id="verOut" style="text-align:center;margin:6px 0 0"></p>
   </div>
 
   <div class="dock">
@@ -460,6 +462,11 @@ function noteName(f){
   var n=Math.round(69+12*Math.log2(f/440));
   return NOTES[((n%12)+12)%12]+(Math.floor(n/12)-1);
 }
+
+/* ---------- Versión (la sella scripts/version.js al construir; en desarrollo queda «desarrollo») ---------- */
+const APP_VERSION = 'desarrollo';
+const APP_BUILD = '';
+$('#verOut').textContent = APP_VERSION==='desarrollo' ? 'Versión: desarrollo' : 'v'+APP_VERSION+' · build '+APP_BUILD;
 
 /* ---------- Ajustes ---------- */
 var KEY='ritmo-remada-v1';
