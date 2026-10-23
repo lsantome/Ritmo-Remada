@@ -507,9 +507,17 @@ function applyTheme(t,persist){
   var m=$('#metaTheme'); if(m) m.setAttribute('content',S.theme==='dark'?'#08171e':'#edf3f4');
   $('#themeLight').setAttribute('aria-pressed',S.theme==='light'?'true':'false');
   $('#themeDark').setAttribute('aria-pressed',S.theme==='dark'?'true':'false');
-  try{ if(window.RitmoNative) window.RitmoNative.setTheme(S.theme==='dark'); }catch(e){}  /* barra de estado en la app Android */
+  nativeTheme();
   if(persist) save();
 }
+/* Barras del sistema en la app Android (plugin RitmoNative de Capacitor); en el navegador no hace nada. */
+function nativeTheme(){
+  try{
+    var p=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.RitmoNative;
+    if(p) p.setTheme({dark:S.theme==='dark'});
+  }catch(e){}
+}
+window.addEventListener('load',nativeTheme);   /* el puente nativo puede no estar listo en la primera llamada */
 $('#themeLight').addEventListener('click',function(){applyTheme('light',true)});
 $('#themeDark').addEventListener('click',function(){applyTheme('dark',true)});
 applyTheme(S.theme,false);
@@ -981,7 +989,7 @@ holdRepeat($('#fracUp'),function(){setFrac(S.frac+1)});
 setPro(S.pro,false);
 
 /* ---------- PWA: funcionamiento sin conexión ---------- */
-var inApp=/RitmoRemadaApp/.test(navigator.userAgent);
+var inApp=/RitmoRemadaApp/.test(navigator.userAgent) || !!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 if('serviceWorker' in navigator && !inApp && /^https?:$/.test(location.protocol)){
   window.addEventListener('load',function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
 }
