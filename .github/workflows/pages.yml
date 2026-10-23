@@ -1,0 +1,76 @@
+name: PWA (pruebas y GitHub Pages)
+
+# Cada push a main y cada PR ejecutan las pruebas y construyen la PWA.
+# Solo main la publica en GitHub Pages (requiere Settings → Pages → Source = GitHub Actions).
+# El workflow de PR no despliega: así una rama rota nunca publica una app rota.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Un despliegue a la vez. No se cancela el que esté en curso: cancelar a medias puede dejar publicada una versión incompleta.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v6
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Pruebas
+        run: npm test
+
+      - name: Construir la PWA (sella versión y service worker)
+        run: npm run build:pwa
+
+      - name: Comprobar que la versión quedó sellada
+        run: |
+          set -e
+          VERSION="$(node -p "require('./package.json').version")"
+          grep -q "^const APP_VERSION = '$VERSION';" dist/site/index.html \
+            || { echo "::error::APP_VERSION no se selló en dist/site/index.html"; exit 1; }
+          grep -q "^const VERSION = 'ritmo-remada-[0-9a-f]\{7\}';" dist/site/sw.js \
+            || { echo "::error::VERSION de la caché no se selló en dist/site/sw.js"; exit 1; }
+          echo "Versión sellada: $VERSION"
+
+      - name: Configurar Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
+      - name: Subir el sitio
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist/site
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
