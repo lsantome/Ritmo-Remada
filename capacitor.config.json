@@ -1,0 +1,13 @@
+{
+  "appId": "es.trainera.ritmo",
+  "appName": "Ritmo de Remada",
+  "webDir": "dist/app",
+  "backgroundColor": "#edf3f4",
+  "server": {
+    "androidScheme": "https",
+    "hostname": "appassets.androidplatform.net"
+  },
+  "android": {
+    "appendUserAgent": "RitmoRemadaApp/1.0"
+  }
+}

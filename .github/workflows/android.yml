@@ -1,0 +1,136 @@
+name: APK y AAB (Android)
+
+# Se ejecuta al crear una etiqueta v* (y entonces adjunta los binarios a la Release de GitHub)
+# o a mano (Actions → «APK y AAB (Android)» → Run workflow; los binarios quedan como artefacto).
+#
+# Firma: con los 4 secretos siguientes genera APK y AAB de RELEASE firmados con tu clave.
+# Las actualizaciones solo se instalan encima si SIEMPRE se firma con la misma clave.
+#   ANDROID_KEYSTORE_BASE64    keystore en base64   (base64 -w0 ritmo-remada.keystore)
+#   ANDROID_KEYSTORE_PASSWORD  contraseña del keystore
+#   ANDROID_KEY_ALIAS          alias de la clave
+#   ANDROID_KEY_PASSWORD       contraseña de la clave
+# Sin ellos, a mano genera un APK de DEPURACIÓN (clave de depuración distinta cada vez: no se puede
+# actualizar encima de otra instalación). Con una etiqueta, sin secretos, el workflow FALLA a propósito:
+# una release siempre va firmada. Ver docs/ANDROID.md.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: write   # solo para adjuntar los binarios a la Release
+    env:
+      KS_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v6
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Preparar Java 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Comprobar que la etiqueta coincide con package.json
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          set -e
+          VERSION="$(node -p "require('./package.json').version")"
+          if [ "$GITHUB_REF_NAME" != "v$VERSION" ]; then
+            echo "::error::La etiqueta $GITHUB_REF_NAME no coincide con la versión de package.json (v$VERSION)"; exit 1
+          fi
+
+      - name: Comprobar que no hay claves versionadas
+        run: |
+          if git ls-files | grep -Ei '\.(keystore|jks|p12)$|keystore\.properties'; then
+            echo "::error::Hay un keystore o un fichero de contraseñas dentro del repositorio"; exit 1
+          fi
+          echo "Sin claves versionadas."
+
+      - name: Instalar dependencias y pruebas
+        run: |
+          npm ci
+          npm test
+
+      - name: Preparar la firma
+        id: firma
+        run: |
+          set -e
+          if [ -n "$KS_BASE64" ]; then
+            echo "$KS_BASE64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+            echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
+            echo "firmado=true" >> "$GITHUB_OUTPUT"
+            echo "Firma de release disponible."
+          else
+            echo "firmado=false" >> "$GITHUB_OUTPUT"
+            if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+              echo "::error::Una release necesita los 4 secretos de firma (ver docs/ANDROID.md)"; exit 1
+            fi
+            echo "::warning::Sin secretos de firma: se genera un APK de DEPURACIÓN, no apto para repartir."
+          fi
+
+      - name: Aceptar licencias del SDK de Android
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+
+      - name: Copiar la web al proyecto Android
+        run: npm run android:sync
+
+      - name: Compilar (release firmado)
+        if: steps.firma.outputs.firmado == 'true'
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          chmod +x android/gradlew
+          node scripts/gradle.js assembleRelease bundleRelease
+
+      - name: Compilar (depuración, sin firma de release)
+        if: steps.firma.outputs.firmado != 'true'
+        run: |
+          chmod +x android/gradlew
+          node scripts/gradle.js assembleDebug
+
+      - name: Reunir y validar los binarios
+        run: |
+          set -e
+          VERSION="$(node -p "require('./package.json').version")"
+          mkdir -p out
+          if [ "${{ steps.firma.outputs.firmado }}" = "true" ]; then
+            cp android/app/build/outputs/apk/release/app-release.apk "out/ritmo-remada-$VERSION.apk"
+            cp android/app/build/outputs/bundle/release/app-release.aab "out/ritmo-remada-$VERSION.aab"
+            "$ANDROID_HOME"/build-tools/*/apksigner verify --verbose "out/ritmo-remada-$VERSION.apk" | head -5
+          else
+            cp android/app/build/outputs/apk/debug/app-debug.apk "out/ritmo-remada-$VERSION-debug.apk"
+          fi
+          ls -l out
+
+      - name: Subir como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-${{ github.ref_name }}
+          path: out/*
+
+      - name: Adjuntar a la Release de GitHub
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*

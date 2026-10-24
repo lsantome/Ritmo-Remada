@@ -1,0 +1,24 @@
+# Dependencias y salidas de compilación
+node_modules/
+dist/
+build/
+.gradle/
+*.log
+
+# Claves de firma y secretos: NUNCA se versionan (ver docs/ANDROID.md)
+*.keystore
+*.jks
+*.p12
+keystore.properties
+local.properties
+.env
+
+# Binarios generados (se publican en Releases, no en el repositorio)
+*.apk
+*.aab
+
+# Editores y sistema
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

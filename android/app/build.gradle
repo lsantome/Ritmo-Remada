@@ -1,0 +1,93 @@
+import groovy.json.JsonSlurper
+
+apply plugin: 'com.android.application'
+
+// Versión: una sola fuente, package.json (semver). versionCode = major*10000 + minor*100 + patch.
+// Con 1.4.0 da 10400, mayor que el 5 del APK 1.4 anterior, así que Android lo acepta como actualización.
+def pkg = new JsonSlurper().parse(file('../../package.json'))
+def (verMajor, verMinor, verPatch) = pkg.version.split('-')[0].tokenize('.').collect { it as int }
+
+// Firma de release: SOLO desde variables de entorno (CI) o desde android/keystore.properties (local, ignorado por Git).
+// Nada de contraseñas ni de claves en ficheros versionados. Sin ellas se genera un APK sin firmar.
+def releaseSigning = null
+if (System.getenv('ANDROID_KEYSTORE_PATH')) {
+    releaseSigning = [
+        storeFile    : file(System.getenv('ANDROID_KEYSTORE_PATH')),
+        storePassword: System.getenv('ANDROID_KEYSTORE_PASSWORD'),
+        keyAlias     : System.getenv('ANDROID_KEY_ALIAS'),
+        keyPassword  : System.getenv('ANDROID_KEY_PASSWORD')
+    ]
+} else if (rootProject.file('keystore.properties').exists()) {
+    def p = new Properties()
+    rootProject.file('keystore.properties').withInputStream { p.load(it) }
+    releaseSigning = [
+        storeFile    : rootProject.file(p['storeFile']),
+        storePassword: p['storePassword'],
+        keyAlias     : p['keyAlias'],
+        keyPassword  : p['keyPassword']
+    ]
+}
+
+android {
+    namespace = "es.trainera.ritmo"
+    compileSdk = rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "es.trainera.ritmo"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode verMajor * 10000 + verMinor * 100 + verPatch
+        versionName pkg.version
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    signingConfigs {
+        if (releaseSigning != null) {
+            release {
+                storeFile releaseSigning.storeFile
+                storePassword releaseSigning.storePassword
+                keyAlias releaseSigning.keyAlias
+                keyPassword releaseSigning.keyPassword
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (releaseSigning != null) signingConfig signingConfigs.release
+        }
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
+
+apply from: 'capacitor.build.gradle'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}

@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ritmo de Remada</title>
+<meta name="description" content="Metrónomo de dos tonos para marcar el inicio y el fin de la palada en una trainera.">
+<meta name="theme-color" content="#edf3f4" id="metaTheme">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ritmo">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script>
+/* Tema antes del primer pintado: claro por defecto, ignora el modo del sistema. */
+(function(){
+  var t='light';
+  try{ if(JSON.parse(localStorage.getItem('ritmo-remada-v1')||'{}').theme==='dark') t='dark'; }catch(e){}
+  document.documentElement.setAttribute('data-theme',t);
+  var m=document.getElementById('metaTheme'); if(m) m.setAttribute('content',t==='dark'?'#08171e':'#edf3f4');
+})();
+</script>
+<style>
+@font-face{font-family:'Barlow';font-weight:500;font-style:normal;font-display:swap;src:url(fonts/barlow-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Barlow';font-weight:600;font-style:normal;font-display:swap;src:url(fonts/barlow-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Barlow Condensed';font-weight:600;font-style:normal;font-display:swap;src:url(fonts/barlow-condensed-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Barlow Condensed';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/barlow-condensed-latin-700-normal.woff2) format('woff2')}
+
+/* Layout: dos pantallas. Principal = regla del ciclo, cadencia, fin de remada y resumen de tonos.
+   Ajustes = tonos (tipo y frecuencia), volumen y tema. El botón de marcha queda fijo abajo en ambas. */
+:root{
+  color-scheme:light;
+  --bg:#edf3f4; --surface:#f9fcfc; --surface-2:#dfe9eb; --line:#bccdd2;
+  --ink:#0c2430; --ink-2:#4a636d;
+  --start:#e0670a; --start-soft:#f9dcc4; --on-start:#0c2430;
+  --end:#0a6a94; --end-soft:#c9e2ee; --on-end:#ffffff;
+  --go:#0c2430; --on-go:#f4fafb; --stop:#c4332a; --on-stop:#ffffff;
+  --f-display:'Barlow Condensed','Arial Narrow','Roboto Condensed',sans-serif;
+  --f-body:'Barlow','Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#08171e; --surface:#0f2530; --surface-2:#173340; --line:#2a4a57;
+  --ink:#e8f2f4; --ink-2:#98b3bd;
+  --start:#ffa347; --start-soft:#47301b; --on-start:#1d1004;
+  --end:#52c2ee; --end-soft:#143646; --on-end:#04202c;
+  --go:#e8f2f4; --on-go:#08171e; --stop:#ff6b5e; --on-stop:#2a0a07;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; background:var(--bg)}
+body{
+  margin:0; min-height:100vh; background:var(--bg); color:var(--ink);
+  font:500 16px/1.35 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:calc(14px + env(safe-area-inset-top,0px));
+  padding-bottom:0;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none; user-select:none;
+}
+.app{max-width:640px; margin:0 auto; display:flex; flex-direction:column; gap:14px; min-height:calc(100vh - 14px - env(safe-area-inset-top,0px))}
+.view{display:flex; flex-direction:column; gap:14px; flex:1 1 auto}
+[hidden]{display:none!important}
+h1,h2,p{margin:0}
+button{font:inherit; color:inherit; cursor:pointer; touch-action:manipulation}
+svg{display:block}
+
+/* Cabeceras */
+.bar{display:flex; align-items:center; justify-content:space-between; gap:12px}
+.bar-title{display:flex; flex-direction:column; gap:3px; min-width:0}
+h1{font:700 30px/1 var(--f-display); letter-spacing:.04em; text-transform:uppercase}
+.cycle-len{font:600 15px var(--f-body); color:var(--ink-2); font-variant-numeric:tabular-nums}
+.icon-btn{flex:none; width:60px; height:60px; border-radius:16px; border:2px solid var(--line); background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; padding:0}
+.icon-btn svg{width:30px; height:30px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+.icon-btn:active{background:var(--surface-2)}
+.bar.back{justify-content:flex-start; position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:var(--bg); margin-top:-14px; padding:14px 0 10px}
+.back-btn{flex:none; height:60px; padding:0 20px 0 12px; border-radius:16px; border:2px solid var(--line); background:var(--surface); color:var(--ink); display:flex; align-items:center; gap:4px; font:700 24px/1 var(--f-display); letter-spacing:.05em; text-transform:uppercase}
+.back-btn svg{width:30px; height:30px; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round}
+.back-btn:active{background:var(--surface-2)}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); background:var(--bg); z-index:10}
+
+/* Regla del ciclo */
+.ruler{position:relative; display:flex; height:60px; border-radius:14px; overflow:hidden; border:1px solid var(--line); background:var(--surface-2)}
+.seg{min-width:0; transition:background-color .35s ease}
+.seg-drive{background:var(--start-soft); border-left:6px solid var(--start)}
+.seg-rec{background:var(--end-soft); border-left:6px solid var(--end)}
+.seg-drive.hit{background:var(--start); transition:none}
+.seg-rec.hit{background:var(--end); transition:none}
+.playhead{position:absolute; top:0; bottom:0; width:4px; left:-2px; background:var(--ink); opacity:0; border-radius:2px; pointer-events:none}
+.cycle-read{display:flex; justify-content:space-between; gap:12px; margin-top:8px; font:600 16px var(--f-body); font-variant-numeric:tabular-nums}
+.cycle-read span{display:flex; align-items:center; gap:8px}
+.dot{width:12px; height:12px; border-radius:3px; flex:none}
+.dot.s{background:var(--start)} .dot.e{background:var(--end)}
+.cycle-read b{font-weight:600; color:var(--ink-2)}
+
+/* Paneles */
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:12px}
+.panel-head{display:flex; align-items:flex-end; justify-content:space-between; gap:12px}
+h2{font:600 15px var(--f-body); letter-spacing:.09em; text-transform:uppercase}
+.unit{font:500 14px var(--f-body); color:var(--ink-2)}
+.val{font:700 44px/0.9 var(--f-display); font-variant-numeric:tabular-nums}
+
+.stepper{display:grid; grid-template-columns:76px minmax(0,1fr) 76px; gap:10px; align-items:center}
+.step{height:76px; border-radius:16px; border:2px solid var(--line); background:var(--surface-2); color:var(--ink); font:600 46px/1 var(--f-display); padding:0}
+.step:active,.step.down{background:var(--line)}
+.step.sm{height:60px; width:60px; font-size:38px; border-radius:14px}
+.big{font:700 104px/0.85 var(--f-display); text-align:center; font-variant-numeric:tabular-nums; letter-spacing:-.01em}
+.row-slider{display:grid; grid-template-columns:60px minmax(0,1fr) 60px; gap:10px; align-items:center}
+
+/* Resumen de tonos (pantalla principal) */
+.chips{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}
+.chip{display:flex; flex-direction:column; align-items:flex-start; gap:4px; min-height:78px; padding:12px; border-radius:16px; border:1px solid var(--line); background:var(--surface); text-align:left}
+.chip:active{background:var(--surface-2)}
+.chip-h{display:flex; align-items:center; gap:8px; font:600 14px var(--f-body); letter-spacing:.09em; text-transform:uppercase; color:var(--ink-2)}
+.chip-v{font:700 26px/1.05 var(--f-display); font-variant-numeric:tabular-nums}
+.chip-v small{font:600 15px var(--f-body); color:var(--ink-2); margin-left:2px}
+
+/* Sliders propios */
+.slider{position:relative; outline:none; --len:44px; --thick:56px; --c:var(--ink); --tc:var(--c); --trk:var(--surface-2)}
+.slider.h{height:var(--thick); width:100%; touch-action:pan-y}
+.slider.v{width:var(--thick); touch-action:none}
+.trk{position:absolute; background:var(--trk); border:1px solid var(--line); border-radius:999px; overflow:hidden}
+.fill{position:absolute; background:var(--c)}
+.thumb{position:absolute; background:var(--surface); border:4px solid var(--tc); border-radius:14px; box-shadow:0 2px 0 rgba(0,0,0,.14)}
+.thumb::after{content:""; position:absolute; inset:9px}
+.slider.h .trk{left:0; right:0; top:50%; height:20px; transform:translateY(-50%)}
+.slider.h .fill{left:0; top:0; bottom:0; width:calc(var(--p)*(100% - var(--len)) + var(--len)/2)}
+.slider.h .thumb{width:var(--len); height:var(--thick); top:50%; transform:translateY(-50%); left:calc(var(--p)*(100% - var(--len)))}
+.slider.h .thumb::after{background:repeating-linear-gradient(90deg,var(--tc) 0 3px,transparent 3px 8px)}
+.slider.v .trk{top:0; bottom:0; left:50%; width:20px; transform:translateX(-50%)}
+.slider.v .fill{left:0; right:0; bottom:0; height:calc(var(--p)*(100% - var(--len)) + var(--len)/2)}
+.slider.v .thumb{height:var(--len); width:var(--thick); left:50%; transform:translateX(-50%); bottom:calc(var(--p)*(100% - var(--len)))}
+.slider.v .thumb::after{background:repeating-linear-gradient(180deg,var(--tc) 0 3px,transparent 3px 8px)}
+.slider:focus-visible .thumb{outline:3px solid var(--ink); outline-offset:3px}
+.slider.drag .thumb{box-shadow:0 0 0 7px color-mix(in srgb,var(--tc) 28%,transparent)}
+#fracSlider{--c:var(--start); --tc:var(--end); --trk:var(--end-soft)}
+
+/* Tiras de tono (pantalla de ajustes) */
+.sec-h{font:700 24px/1 var(--f-display); letter-spacing:.05em; text-transform:uppercase; margin-top:4px}
+.tones{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}
+.tone{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:12px 10px 10px; display:flex; flex-direction:column; gap:8px; --c:var(--start); --tc:var(--start); --on-c:var(--on-start); --trk:var(--surface-2)}
+.tone.end{--c:var(--end); --tc:var(--end); --on-c:var(--on-end)}
+.tone-head{display:flex; align-items:center; gap:8px}
+.tone-head .hint{margin-left:auto; font:500 13px var(--f-body); color:var(--ink-2)}
+.hz{display:block; font:700 42px/0.95 var(--f-display); font-variant-numeric:tabular-nums}
+.hz small{font:600 16px var(--f-body); color:var(--ink-2); margin-left:4px}
+.note{font:600 14px var(--f-body); color:var(--ink-2); margin-top:-2px}
+.tone .slider.v{align-self:center; height:280px; margin-top:4px}
+.step:focus-visible,.play:focus-visible,.icon-btn:focus-visible,.back-btn:focus-visible,.opt:focus-visible,.chip:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
+
+/* Tema */
+.opts{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+.opt{height:72px; border:2px solid var(--line); background:var(--surface-2); color:var(--ink); border-radius:16px; display:flex; align-items:center; justify-content:center; gap:10px; font:700 26px/1 var(--f-display); letter-spacing:.05em; text-transform:uppercase; padding:0}
+.opt svg{width:28px; height:28px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+.opt[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+
+/* Botón de marcha fijo */
+.dock{position:sticky; bottom:0; margin-top:auto; padding:12px 0 calc(12px + env(safe-area-inset-bottom,0px)); background:linear-gradient(to top,var(--bg) 80%,transparent)}
+.play{width:100%; height:80px; border:0; border-radius:20px; background:var(--go); color:var(--on-go); display:flex; align-items:center; justify-content:center; gap:16px}
+.play.on{background:var(--stop); color:var(--on-stop)}
+.play svg{width:34px; height:34px; flex:none; fill:currentColor}
+.play .ico-stop{display:none}
+.play.on .ico-play{display:none}
+.play.on .ico-stop{display:block}
+.play-label{display:flex; flex-direction:column; align-items:flex-start; gap:3px}
+.play-label b{font:700 36px/1 var(--f-display); letter-spacing:.06em; text-transform:uppercase}
+.play-label small{font:500 14px var(--f-body); opacity:.85; font-variant-numeric:tabular-nums}
+
+/* Modo Pro */
+.switch{display:flex; align-items:center; justify-content:space-between; gap:14px; width:100%; min-height:92px; padding:12px 14px; border:2px solid var(--line); border-radius:16px; background:var(--surface-2); text-align:left; color:var(--ink)}
+.sw-text{display:flex; flex-direction:column; gap:5px; min-width:0}
+.sw-text b{font:700 30px/1 var(--f-display); letter-spacing:.05em; text-transform:uppercase}
+.sw-text small{font:500 14px/1.3 var(--f-body); color:var(--ink-2)}
+.sw-track{flex:none; position:relative; width:88px; height:48px; border-radius:999px; background:var(--line); transition:background-color .2s}
+.sw-thumb{position:absolute; top:5px; left:5px; width:38px; height:38px; border-radius:50%; background:var(--surface); box-shadow:0 1px 3px rgba(0,0,0,.35); transition:transform .2s}
+.switch[aria-checked="true"]{border-color:var(--ink)}
+.switch[aria-checked="true"] .sw-track{background:var(--ink)}
+.switch[aria-checked="true"] .sw-thumb{transform:translateX(40px); background:var(--bg)}
+.pro-clock{display:block; font:700 104px/0.85 var(--f-display); text-align:center; font-variant-numeric:tabular-nums; letter-spacing:-.01em}
+.meter{height:14px; border-radius:999px; background:var(--surface-2); border:1px solid var(--line); overflow:hidden}
+.meter i{display:block; height:100%; width:0; background:var(--ink)}
+.pro-meta{display:flex; justify-content:space-between; gap:12px; font:600 15px var(--f-body); color:var(--ink-2); font-variant-numeric:tabular-nums}
+.panel.flash{background:var(--start-soft); border-color:var(--start); box-shadow:0 0 0 5px var(--start)}
+.iv-list{display:flex; flex-direction:column; gap:12px}
+.iv{border:1px solid var(--line); border-radius:14px; background:var(--surface-2); padding:10px; display:flex; flex-direction:column; gap:8px}
+.iv.now{background:var(--start-soft); border-color:var(--start)}
+.iv.past{opacity:.5}
+.iv-head{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.iv-title{font:700 24px/1 var(--f-display); letter-spacing:.05em; text-transform:uppercase}
+.iv-del{width:52px; height:52px; border-radius:14px; border:2px solid var(--line); background:var(--surface); color:var(--ink); font:600 34px/1 var(--f-display); padding:0}
+.iv-del:active{background:var(--line)}
+.iv-lbl{font:600 13px var(--f-body); letter-spacing:.09em; text-transform:uppercase; color:var(--ink-2)}
+.iv-ctl{display:grid; grid-template-columns:64px minmax(0,1fr) 64px; gap:8px; align-items:center}
+.step.md{height:64px; width:64px; font-size:40px; border-radius:14px}
+.iv-val{font:700 clamp(38px,12.5vw,54px)/1 var(--f-display); text-align:center; font-variant-numeric:tabular-nums}
+.add{height:76px; border:2px dashed var(--ink-2); border-radius:16px; background:transparent; color:var(--ink); display:flex; align-items:center; justify-content:center; gap:12px; font:700 26px/1 var(--f-display); letter-spacing:.05em; text-transform:uppercase}
+.add b{font:600 56px/1 var(--f-display)}
+.add:active{background:var(--surface-2)}
+button[disabled]{opacity:.35; pointer-events:none}
+#proList.locked .step,#proList.locked .iv-del,#proList.locked .add{opacity:.35; pointer-events:none}
+.switch:focus-visible,.add:focus-visible,.iv-del:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
+
+@media (prefers-reduced-motion: reduce){ .seg,.sw-track,.sw-thumb{transition:none} }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- PANTALLA PRINCIPAL -->
+  <div class="view" id="viewMain">
+    <div class="bar">
+      <div class="bar-title">
+        <h1>Ritmo de remada</h1>
+        <span class="cycle-len" id="cycleLen">2,00 s por palada</span>
+      </div>
+      <button class="icon-btn" id="openSettings" type="button" aria-label="Abrir ajustes">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/><circle cx="8" cy="6" r="2.6" fill="var(--surface)"/><circle cx="16" cy="12" r="2.6" fill="var(--surface)"/><circle cx="10" cy="18" r="2.6" fill="var(--surface)"/></svg>
+      </button>
+    </div>
+
+    <section aria-label="Ciclo de la palada">
+      <div class="ruler" id="ruler" role="img" aria-label="Reparto de la palada entre remada y recobro">
+        <div class="seg seg-drive" id="segDrive"></div>
+        <div class="seg seg-rec" id="segRec"></div>
+        <div class="playhead" id="playhead"></div>
+      </div>
+      <div class="cycle-read">
+        <span><i class="dot s"></i>Remada <b id="driveSec">1,00 s</b></span>
+        <span><i class="dot e"></i>Recobro <b id="recSec">1,00 s</b></span>
+      </div>
+    </section>
+
+    <section class="panel" id="bpmPanel" aria-labelledby="bpmTitle">
+      <div class="panel-head">
+        <h2 id="bpmTitle">Cadencia</h2>
+        <span class="unit">BPM · paladas por minuto</span>
+      </div>
+      <div class="stepper">
+        <button class="step" id="bpmDown" type="button" aria-label="Bajar un BPM">−</button>
+        <output class="big" id="bpmOut" for="bpmSlider">30</output>
+        <button class="step" id="bpmUp" type="button" aria-label="Subir un BPM">+</button>
+      </div>
+      <div id="bpmSlider"></div>
+    </section>
+
+    <section class="panel" id="proStatus" aria-labelledby="proState" hidden>
+      <div class="panel-head">
+        <h2 id="proState">Intervalo 1 de 2</h2>
+        <span class="unit" id="proBpmLbl">24 BPM</span>
+      </div>
+      <output class="pro-clock" id="proClock" aria-live="off">2:00</output>
+      <div class="meter" aria-hidden="true"><i id="proBar"></i></div>
+      <div class="pro-meta"><span id="proNext">Siguiente: 1:00 · 30 BPM</span><span id="proLeft">Total 3:00</span></div>
+    </section>
+
+    <section class="panel" aria-labelledby="fracTitle">
+      <div class="panel-head">
+        <div>
+          <h2 id="fracTitle">Fin de remada</h2>
+          <p class="unit">% del ciclo desde el tono de inicio</p>
+        </div>
+        <output class="val" id="fracOut" for="fracSlider">50 %</output>
+      </div>
+      <div class="row-slider">
+        <button class="step sm" id="fracDown" type="button" aria-label="Bajar un 1 %">−</button>
+        <div id="fracSlider"></div>
+        <button class="step sm" id="fracUp" type="button" aria-label="Subir un 1 %">+</button>
+      </div>
+    </section>
+
+    <section class="panel" id="proList" aria-labelledby="ivTitle" hidden>
+      <div class="panel-head">
+        <h2 id="ivTitle">Intervalos</h2>
+        <span class="unit" id="ivTotal">Total 3:00</span>
+      </div>
+      <div class="iv-list" id="ivRows"></div>
+      <button class="add" id="addIv" type="button" aria-label="Añadir intervalo"><b>+</b>Añadir intervalo</button>
+    </section>
+
+    <section class="chips" aria-label="Tonos activos">
+      <button class="chip" type="button" data-open-settings aria-label="Frecuencia del tono de inicio, abrir ajustes">
+        <span class="chip-h"><i class="dot s"></i>Inicio</span>
+        <span class="chip-v" id="chipS">1400 <small>Hz</small></span>
+      </button>
+      <button class="chip" type="button" data-open-settings aria-label="Frecuencia del tono de fin, abrir ajustes">
+        <span class="chip-h"><i class="dot e"></i>Fin</span>
+        <span class="chip-v" id="chipE">440 <small>Hz</small></span>
+      </button>
+    </section>
+  </div>
+
+  <!-- PANTALLA DE AJUSTES -->
+  <div class="view" id="viewSettings" hidden>
+    <div class="bar back">
+      <button class="back-btn" id="backBtn" type="button" aria-label="Volver a la pantalla principal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        Volver
+      </button>
+      <h1>Ajustes</h1>
+    </div>
+
+    <h2 class="sec-h">Modo Pro</h2>
+    <section class="panel" aria-label="Modo Pro">
+      <button class="switch" id="proSwitch" type="button" role="switch" aria-checked="false">
+        <span class="sw-text"><b>Intervalos</b><small>Duración y cadencia distintas en cada tramo. Avisa con 4 tonos agudos a 10 s, a 5 s y al terminar cada intervalo.</small></span>
+        <span class="sw-track" aria-hidden="true"><span class="sw-thumb"></span></span>
+      </button>
+      <button class="opt" id="testWarn" type="button" hidden>Probar aviso</button>
+    </section>
+
+    <h2 class="sec-h">Frecuencia</h2>
+    <section class="tones" aria-label="Frecuencias">
+      <article class="tone" id="toneStart">
+        <div class="tone-head"><i class="dot s"></i><h2>Inicio</h2><span class="hint">agudo</span></div>
+        <output class="hz"><span id="fsOut">1400</span><small>Hz</small></output>
+        <p class="note" id="fsNote">Fa6</p>
+        <div id="fsSlider"></div>
+      </article>
+      <article class="tone end" id="toneEnd">
+        <div class="tone-head"><i class="dot e"></i><h2>Fin</h2><span class="hint">grave</span></div>
+        <output class="hz"><span id="feOut">440</span><small>Hz</small></output>
+        <p class="note" id="feNote">La4</p>
+        <div id="feSlider"></div>
+      </article>
+    </section>
+
+    <h2 class="sec-h">Volumen</h2>
+    <section class="panel" aria-labelledby="volTitle">
+      <div class="panel-head">
+        <h2 id="volTitle">Volumen general</h2>
+        <output class="val" id="volOut" for="volSlider" style="font-size:36px">85</output>
+      </div>
+      <div id="volSlider"></div>
+    </section>
+
+    <h2 class="sec-h">Apariencia</h2>
+    <section class="panel" aria-labelledby="themeTitle">
+      <h2 id="themeTitle">Tema</h2>
+      <div class="opts" role="group" aria-labelledby="themeTitle">
+        <button class="opt" id="themeLight" type="button" aria-pressed="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>
+          Claro
+        </button>
+        <button class="opt" id="themeDark" type="button" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+          Oscuro
+        </button>
+      </div>
+    </section>
+
+    <p class="note" id="verOut" style="text-align:center;margin:6px 0 0"></p>
+  </div>
+
+  <div class="dock">
+    <button class="play" id="playBtn" type="button" aria-pressed="false">
+      <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>
+      <svg class="ico-stop" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg>
+      <span class="play-label"><b id="playLabel">Iniciar</b><small id="playSub">30 BPM · fin al 50 %</small></span>
+    </button>
+  </div>
+</div>
+
+<script>
+/*SCHED-START*/
+function makeScheduler(deps){
+  var t0=0, endDone=true, lastEnd=0, running=false;
+  return {
+    begin:function(at){ t0=at; endDone=false; lastEnd=0; running=true; deps.start(t0); },
+    stop:function(){ running=false; },
+    isRunning:function(){ return running; },
+    t0:function(){ return t0; },
+    tick:function(){
+      if(!running) return;
+      var now=deps.now(), horizon=now+deps.lookahead(), guard=0;
+      while(guard++<64){
+        var p=deps.params(), T=60/p.bpm;
+        if(!endDone){
+          var tEnd=t0+p.frac*T;
+          if(tEnd<horizon){ var at=Math.max(tEnd,now); deps.end(at); lastEnd=at; endDone=true; continue; }
+          break;
+        } else {
+          var tNext=Math.max(t0+T,lastEnd+0.04);
+          if(tNext<now) tNext=now+0.02;
+          if(tNext<horizon){ t0=tNext; deps.start(t0); endDone=false; continue; }
+          break;
+        }
+      }
+    }
+  };
+}
+/* Planificador del modo Pro: recorre una lista de intervalos {sec,bpm}.
+   Avisos de 4 tonos agudos a 10 s y 5 s del final de cada intervalo (solo si el intervalo es más largo
+   que ese margen) y al terminar. Tras el aviso de cambio, el siguiente intervalo arranca LEAD segundos
+   después para que los tonos de aviso no se pisen con la primera palada. */
+function makeProScheduler(deps){
+  var LEAD=0.45, BURST=0.36;
+  var i=0, Te=0, t0=0, endDone=true, lastEnd=0, rhythmDone=false, warns=[];
+  var running=false, finished=false, finishAt=0, sessionStart=0;
+  function enter(k,at,lead){
+    var iv=deps.plan().intervals[k];
+    i=k; Te=at+iv.sec; t0=at+lead; endDone=false; lastEnd=0; rhythmDone=false; warns=[];
+    if(iv.sec>10) warns.push(Te-10);
+    if(iv.sec>5) warns.push(Te-5);
+    deps.start(t0,k);
+  }
+  return {
+    LEAD:LEAD, BURST:BURST,
+    begin:function(at){ running=true; finished=false; finishAt=0; sessionStart=at; enter(0,at,0); },
+    stop:function(){ running=false; },
+    isRunning:function(){ return running; },
+    isFinished:function(){ return finished; },
+    finishAt:function(){ return finishAt; },
+    start:function(){ return sessionStart; },
+    t0:function(){ return t0; },
+    index:function(){ return i; },
+    tick:function(){
+      if(!running||finished) return;
+      var now=deps.now(), horizon=now+deps.lookahead(), guard=0;
+      while(guard++<200){
+        var pl=deps.plan(), iv=pl.intervals[i], T=60/iv.bpm;
+        if(warns.length&&warns[0]<horizon){ deps.warn(Math.max(warns.shift(),now)); continue; }
+        if(!rhythmDone){
+          if(!endDone){
+            var tEnd=t0+pl.frac*T;
+            if(tEnd>=Te){ endDone=true; lastEnd=t0; continue; }
+            if(tEnd<horizon){ var at=Math.max(tEnd,now); deps.end(at); lastEnd=at; endDone=true; continue; }
+            break;
+          } else {
+            var tNext=Math.max(t0+T,lastEnd+0.04);
+            if(tNext<now) tNext=now+0.02;
+            if(tNext>=Te){ rhythmDone=true; continue; }
+            if(tNext<horizon){ t0=tNext; deps.start(t0,i); endDone=false; continue; }
+            break;
+          }
+        }
+        if(warns.length) break;
+        if(Te<horizon){
+          var tb=Math.max(Te,now);
+          deps.warn(tb);
+          if(i+1>=pl.intervals.length){ finished=true; finishAt=tb+BURST; return; }
+          enter(i+1,Te,LEAD);
+          continue;
+        }
+        break;
+      }
+    }
+  };
+}
+/*SCHED-END*/
+
+(function(){
+'use strict';
+
+var $=function(s){return document.querySelector(s)};
+var clamp=function(v,a,b){return Math.min(b,Math.max(a,v))};
+var nf2=new Intl.NumberFormat('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});
+var nf0=new Intl.NumberFormat('es-ES',{maximumFractionDigits:0});
+var NOTES=['Do','Do#','Re','Re#','Mi','Fa','Fa#','Sol','Sol#','La','La#','Si'];
+function noteName(f){
+  var n=Math.round(69+12*Math.log2(f/440));
+  return NOTES[((n%12)+12)%12]+(Math.floor(n/12)-1);
+}
+
+/* ---------- Versión (la sella scripts/version.js al construir; en desarrollo queda «desarrollo») ---------- */
+const APP_VERSION = 'desarrollo';
+const APP_BUILD = '';
+$('#verOut').textContent = APP_VERSION==='desarrollo' ? 'Versión: desarrollo' : 'v'+APP_VERSION+' · build '+APP_BUILD;
+
+/* ---------- Ajustes ---------- */
+var KEY='ritmo-remada-v1';
+var DEF={bpm:30,frac:50,fs:1400,fe:440,vol:85,theme:'light',pro:false};
+var LIM={bpm:[10,80],frac:[10,90],fs:[400,3200],fe:[100,1000],vol:[0,100]};
+function load(){
+  var S=Object.assign({},DEF);
+  S.intervals=[{sec:120,bpm:24},{sec:60,bpm:30}];   /* ejemplo editable la primera vez que se activa el modo Pro */
+  try{
+    var o=JSON.parse(localStorage.getItem(KEY)||'{}');
+    Object.keys(LIM).forEach(function(k){
+      var v=Number(o[k]); if(isFinite(v)&&o[k]!==null&&o[k]!=='') S[k]=clamp(Math.round(v),LIM[k][0],LIM[k][1]);
+    });
+    if(o.theme==='dark') S.theme='dark';
+    if(o.pro===true) S.pro=true;
+    if(Array.isArray(o.intervals)){
+      var arr=[];
+      o.intervals.slice(0,30).forEach(function(x){
+        var sec=Math.round(Number(x&&x.sec)/5)*5, bpm=Math.round(Number(x&&x.bpm));
+        if(isFinite(sec)&&isFinite(bpm)) arr.push({sec:clamp(sec,5,3600),bpm:clamp(bpm,10,80)});
+      });
+      if(arr.length) S.intervals=arr;
+    }
+  }catch(e){}
+  return S;
+}
+var S=load();
+var saveTimer=0;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(function(){ try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){} },250);
+}
+
+/* ---------- Tema ---------- */
+function applyTheme(t,persist){
+  S.theme=t==='dark'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',S.theme);
+  var m=$('#metaTheme'); if(m) m.setAttribute('content',S.theme==='dark'?'#08171e':'#edf3f4');
+  $('#themeLight').setAttribute('aria-pressed',S.theme==='light'?'true':'false');
+  $('#themeDark').setAttribute('aria-pressed',S.theme==='dark'?'true':'false');
+  nativeTheme();
+  if(persist) save();
+}
+/* Barras del sistema en la app Android (plugin RitmoNative de Capacitor); en el navegador no hace nada. */
+function nativeTheme(){
+  try{
+    var p=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.RitmoNative;
+    if(p) p.setTheme({dark:S.theme==='dark'});
+  }catch(e){}
+}
+window.addEventListener('load',nativeTheme);   /* el puente nativo puede no estar listo en la primera llamada */
+$('#themeLight').addEventListener('click',function(){applyTheme('light',true)});
+$('#themeDark').addEventListener('click',function(){applyTheme('dark',true)});
+applyTheme(S.theme,false);
+
+/* ---------- Pantallas (con el botón Atrás del móvil) ---------- */
+var viewMain=$('#viewMain'), viewSet=$('#viewSettings'), pushed=false;
+function route(){
+  var s=location.hash==='#ajustes';
+  viewMain.hidden=s; viewSet.hidden=!s;
+  if(!s) pushed=false;
+  window.scrollTo(0,0);
+}
+function openSettings(){ pushed=true; location.hash='#ajustes'; }
+function closeSettings(){
+  if(pushed){ history.back(); }
+  else { try{history.replaceState(null,'',location.pathname+location.search);}catch(e){} route(); }
+}
+window.addEventListener('hashchange',route);
+$('#openSettings').addEventListener('click',openSettings);
+Array.prototype.forEach.call(document.querySelectorAll('[data-open-settings]'),function(b){b.addEventListener('click',openSettings)});
+$('#backBtn').addEventListener('click',closeSettings);
+route();
+
+/* ---------- Audio ---------- */
+var ctx=null, master=null, bus=null;
+function ensureAudio(){
+  if(!ctx){
+    var AC=window.AudioContext||window.webkitAudioContext;
+    try{ ctx=new AC({latencyHint:'interactive'}); }catch(e){ ctx=new AC(); }
+    master=ctx.createGain();
+    var comp=ctx.createDynamicsCompressor();
+    comp.threshold.value=-10; comp.knee.value=12; comp.ratio.value=6; comp.attack.value=0.002; comp.release.value=0.08;
+    master.connect(comp); comp.connect(ctx.destination);
+    applyVolume();
+    try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}
+  }
+  if(ctx.state!=='running'){ try{ ctx.resume(); }catch(e){} }
+  return ctx;
+}
+function applyVolume(){
+  if(!master) return;
+  master.gain.setTargetAtTime(Math.pow(S.vol/100,1.5),ctx.currentTime,0.02);
+}
+function mkHold(dest,t,peak,att,hold,rel){
+  var g=ctx.createGain(); g.connect(dest);
+  var p=g.gain; p.setValueAtTime(0.0001,t);
+  p.linearRampToValueAtTime(peak,t+att);
+  p.setValueAtTime(peak,t+att+hold);
+  p.exponentialRampToValueAtTime(0.0001,t+att+hold+rel);
+  return g;
+}
+function mkOsc(type,f,t,dur,dest){
+  var o=ctx.createOscillator(); o.type=type; o.frequency.setValueAtTime(f,t);
+  o.connect(dest); o.start(t); o.stop(t+dur); return o;
+}
+function mkFilter(type,f,q,dest){
+  var b=ctx.createBiquadFilter(); b.type=type; b.frequency.value=f; b.Q.value=q; b.connect(dest); return b;
+}
+/* Sonido fijo: pitido (onda cuadrada filtrada, unos 100 ms). */
+function voice(f,t,dest){
+  var g=mkHold(dest,t,0.35,0.006,0.1,0.03);
+  var lp=mkFilter('lowpass',Math.min(f*4,9000),0.7,g);
+  mkOsc('square',f,t,0.2,lp);
+}
+/* Aviso de intervalo: 4 tonos muy agudos y muy seguidos (3600 Hz, 60 ms cada uno, uno cada 100 ms). */
+var WARN_HZ=3600;
+function warnBurst(t,dest){
+  for(var k=0;k<4;k++){
+    var tt=t+k*0.1;
+    var g=mkHold(dest,tt,0.8,0.003,0.045,0.012);
+    mkOsc('sine',WARN_HZ,tt,0.08,g);
+  }
+}
+function preview(which){
+  if(running) return;
+  ensureAudio();
+  var t=ctx.currentTime+0.03;
+  voice(which==='e'?S.fe:S.fs,t,master);
+}
+
+/* ---------- Planificador ---------- */
+var running=false, worker=null, workerUrl=null, iv=null, raf=0, flashQ=[], wl=null;
+var useWorker=false;
+var sched=makeScheduler({
+  now:function(){return ctx.currentTime},
+  params:function(){return {bpm:S.bpm,frac:S.frac/100}},
+  lookahead:function(){return (useWorker||!document.hidden)?0.2:1.2},
+  start:function(t){ voice(S.fs,t,bus); flashQ.push({k:'s',t:t}); if(flashQ.length>24) flashQ.shift(); },
+  end:function(t){ voice(S.fe,t,bus); flashQ.push({k:'e',t:t}); if(flashQ.length>24) flashQ.shift(); }
+});
+function flash(k,t){ flashQ.push({k:k,t:t}); if(flashQ.length>24) flashQ.shift(); }
+var psched=makeProScheduler({
+  now:function(){return ctx.currentTime},
+  lookahead:function(){return (useWorker||!document.hidden)?0.2:1.2},
+  plan:function(){return {intervals:S.intervals,frac:S.frac/100}},
+  start:function(t){ voice(S.fs,t,bus); flash('s',t); },
+  end:function(t){ voice(S.fe,t,bus); flash('e',t); },
+  warn:function(t){ warnBurst(t,bus); flash('w',t); }
+});
+function tick(){
+  if(!ctx) return;
+  if(S.pro){
+    psched.tick();
+    if(psched.isFinished()&&ctx.currentTime>=psched.finishAt()+0.1) endSession();
+  } else sched.tick();
+}
+function useInterval(){ useWorker=false; if(!iv) iv=setInterval(tick,25); }
+function startTicker(){
+  stopTicker();
+  try{
+    workerUrl=URL.createObjectURL(new Blob(["var id=0;onmessage=function(e){clearInterval(id);if(e.data==='go'){id=setInterval(function(){postMessage(1)},25)}}"],{type:'text/javascript'}));
+    worker=new Worker(workerUrl);
+    useWorker=true;
+    worker.onmessage=tick;
+    worker.onerror=function(){ if(worker){worker.terminate(); worker=null;} useInterval(); };
+    worker.postMessage('go');
+  }catch(e){ worker=null; useInterval(); }
+}
+function stopTicker(){
+  if(worker){ try{worker.postMessage('stop'); worker.terminate();}catch(e){} worker=null; }
+  if(workerUrl){ try{URL.revokeObjectURL(workerUrl)}catch(e){} workerUrl=null; }
+  if(iv){ clearInterval(iv); iv=null; }
+}
+function lock(){
+  try{
+    if('wakeLock' in navigator){
+      navigator.wakeLock.request('screen').then(function(l){ wl=l; l.addEventListener('release',function(){ if(wl===l) wl=null; }); }).catch(function(){});
+    }
+  }catch(e){}
+}
+function unlock(){ try{ if(wl) wl.release(); }catch(e){} wl=null; }
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='visible'){
+    if(ctx&&ctx.state!=='running'){ try{ctx.resume()}catch(e){} }
+    if(running&&!wl) lock();
+  }
+});
+
+/* ---------- Interfaz ---------- */
+var segDrive=$('#segDrive'), segRec=$('#segRec'), playhead=$('#playhead'), playBtn=$('#playBtn');
+var proStatusEl=$('#proStatus'), curIdx=0, ended=false;
+function hit(k){
+  if(k==='w'){
+    proStatusEl.classList.add('flash');
+    setTimeout(function(){proStatusEl.classList.remove('flash')},450);
+    return;
+  }
+  var el=k==='s'?segDrive:segRec;
+  el.classList.add('hit');
+  setTimeout(function(){el.classList.remove('hit')},110);
+}
+function curBpm(){ return S.pro? S.intervals[Math.min(curIdx,S.intervals.length-1)].bpm : S.bpm; }
+function fmt(sec){ sec=Math.max(0,Math.ceil(sec-1e-9)); var m=Math.floor(sec/60), s=sec%60; return m+':'+(s<10?'0':'')+s; }
+function totalSec(){ return S.intervals.reduce(function(a,x){return a+x.sec},0); }
+function setTxt(el,v){ if(el.textContent!==v) el.textContent=v; }
+function proTimeline(now){
+  var el=now-psched.start(), acc=0, n=S.intervals.length, tot=totalSec();
+  for(var k=0;k<n;k++){
+    var d=S.intervals[k].sec;
+    if(el<acc+d) return {k:k, rem:Math.min(d,acc+d-el), frac:Math.max(0,el-acc)/d, left:Math.min(tot,Math.max(0,tot-el))};
+    acc+=d;
+  }
+  return {k:n-1, rem:0, frac:1, left:0};
+}
+function updatePro(now){   /* sesión en marcha: cuenta atrás del intervalo actual */
+  var tl=proTimeline(now), n=S.intervals.length;
+  if(tl.k!==curIdx){ curIdx=tl.k; render(); markRows(); }
+  var cur=S.intervals[tl.k], nx=S.intervals[tl.k+1];
+  setTxt($('#proState'),'Intervalo '+(tl.k+1)+' de '+n);
+  setTxt($('#proClock'),fmt(tl.rem));
+  $('#proBar').style.width=(tl.frac*100).toFixed(1)+'%';
+  setTxt($('#proNext'),nx?'Siguiente: '+fmt(nx.sec)+' · '+nx.bpm+' BPM':'Último intervalo');
+  setTxt($('#proLeft'),'Quedan '+fmt(tl.left));
+  setTxt($('#playSub'),'Intervalo '+(tl.k+1)+'/'+n+' · '+fmt(tl.rem)+' · '+cur.bpm+' BPM');
+}
+function renderPro(){   /* en reposo */
+  var n=S.intervals.length, first=S.intervals[0], second=S.intervals[1];
+  setTxt($('#proState'),ended?'Sesión terminada':'Intervalo 1 de '+n);
+  setTxt($('#proClock'),ended?'0:00':fmt(first.sec));
+  $('#proBar').style.width=ended?'100%':'0%';
+  setTxt($('#proNext'),second?'Siguiente: '+fmt(second.sec)+' · '+second.bpm+' BPM':'Intervalo único');
+  setTxt($('#proLeft'),'Total '+fmt(totalSec()));
+}
+function frame(){
+  if(!running||!ctx) return;
+  var lat=ctx.outputLatency||ctx.baseLatency||0;
+  var now=ctx.currentTime-lat;
+  while(flashQ.length&&flashQ[0].t<=now){
+    var f=flashQ.shift();
+    if(now-f.t<0.25) hit(f.k);
+  }
+  if(S.pro) updatePro(now);
+  var T=60/curBpm(), ph=(now-(S.pro?psched:sched).t0())/T;
+  ph=ph<0?(S.pro?0:ph-Math.floor(ph)):ph%1;
+  playhead.style.left='calc('+(ph*100).toFixed(2)+'% - 2px)';
+  raf=requestAnimationFrame(frame);
+}
+function setRunning(on){
+  running=on;
+  playBtn.classList.toggle('on',on);
+  playBtn.setAttribute('aria-pressed',on?'true':'false');
+  $('#playLabel').textContent=on?'Parar':'Iniciar';
+  playhead.style.opacity=on?1:0;
+  $('#proList').classList.toggle('locked',on);
+  markRows();
+}
+function start(){
+  ensureAudio();
+  bus=ctx.createGain(); bus.connect(master);
+  flashQ.length=0; curIdx=0; ended=false;
+  setRunning(true);
+  render();
+  var at=ctx.currentTime+0.12;
+  if(S.pro) psched.begin(at); else sched.begin(at);
+  startTicker();
+  lock();
+  raf=requestAnimationFrame(frame);
+}
+function stop(){
+  sched.stop(); psched.stop();
+  stopTicker();
+  cancelAnimationFrame(raf);
+  if(bus){
+    var b=bus; bus=null;
+    try{ b.gain.setTargetAtTime(0,ctx.currentTime,0.008); }catch(e){}
+    setTimeout(function(){ try{b.disconnect()}catch(e){} },150);
+  }
+  curIdx=0;
+  setRunning(false);
+  unlock();
+  render();
+}
+function endSession(){ stop(); ended=true; render(); }
+function toggle(){ if(running) stop(); else start(); }
+playBtn.addEventListener('click',toggle);
+document.addEventListener('keydown',function(e){
+  if(e.code==='Space'&&e.target===document.body){ e.preventDefault(); toggle(); }
+});
+
+function makeSlider(root,o){
+  var vertical=!!o.vertical, log=!!o.log, value=o.value;
+  root.classList.add('slider',vertical?'v':'h');
+  root.setAttribute('role','slider'); root.tabIndex=0;
+  root.setAttribute('aria-orientation',vertical?'vertical':'horizontal');
+  root.setAttribute('aria-label',o.label);
+  root.setAttribute('aria-valuemin',o.min); root.setAttribute('aria-valuemax',o.max);
+  root.innerHTML='<div class="trk"><div class="fill"></div></div><div class="thumb"></div>';
+  var thumb=root.querySelector('.thumb');
+  function toRatio(v){ return log? Math.log(v/o.min)/Math.log(o.max/o.min) : (v-o.min)/(o.max-o.min); }
+  function toValue(r){ return log? o.min*Math.pow(o.max/o.min,r) : o.min+r*(o.max-o.min); }
+  function snap(v){ return clamp(Math.round(v/o.step)*o.step,o.min,o.max); }
+  function draw(){
+    root.style.setProperty('--p',clamp(toRatio(value),0,1));
+    root.setAttribute('aria-valuenow',value);
+    root.setAttribute('aria-valuetext',o.text?o.text(value):String(value));
+  }
+  var drag=false, grabOff=0, rect=null, tl=0;
+  function posOf(e){ return vertical? rect.bottom-e.clientY : e.clientX-rect.left; }
+  function ratioFrom(e){
+    var size=(vertical?rect.height:rect.width)-tl;
+    return clamp((posOf(e)-tl/2-grabOff)/size,0,1);
+  }
+  function update(e){
+    var v=snap(toValue(ratioFrom(e)));
+    if(v!==value){ value=v; draw(); if(o.onInput) o.onInput(v); }
+  }
+  root.addEventListener('pointerdown',function(e){
+    if(e.button!==undefined&&e.button!==0) return;
+    rect=root.getBoundingClientRect();
+    tl=vertical?thumb.offsetHeight:thumb.offsetWidth;
+    var size=(vertical?rect.height:rect.width)-tl;
+    grabOff=0;
+    if(e.target===thumb&&size>0){ grabOff=posOf(e)-(tl/2+clamp(toRatio(value),0,1)*size); }
+    drag=true;
+    try{ root.setPointerCapture(e.pointerId); }catch(err){}
+    root.classList.add('drag');
+    try{ root.focus({preventScroll:true}); }catch(err){}
+    e.preventDefault();
+    update(e);
+  });
+  root.addEventListener('pointermove',function(e){ if(drag) update(e); });
+  function end(){
+    if(!drag) return;
+    drag=false; root.classList.remove('drag');
+    if(o.onChange) o.onChange(value);
+  }
+  root.addEventListener('pointerup',end);
+  root.addEventListener('pointercancel',end);
+  root.addEventListener('keydown',function(e){
+    var k=e.key, dir=0, mult=1, nv;
+    if(k==='ArrowRight'||k==='ArrowUp') dir=1;
+    else if(k==='ArrowLeft'||k==='ArrowDown') dir=-1;
+    else if(k==='PageUp'){dir=1;mult=10}
+    else if(k==='PageDown'){dir=-1;mult=10}
+    else if(k==='Home') nv=o.min;
+    else if(k==='End') nv=o.max;
+    else return;
+    e.preventDefault();
+    if(nv===undefined) nv=log? value*Math.pow(2,dir*mult/12) : value+dir*mult*o.step;
+    nv=snap(nv);
+    if(nv!==value){ value=nv; draw(); if(o.onInput) o.onInput(nv); if(o.onChange) o.onChange(nv); }
+  });
+  draw();
+  return { set:function(v){ value=snap(v); draw(); }, get:function(){ return value; } };
+}
+
+function holdRepeat(btn,fn){
+  var to=0, rep=0;
+  function halt(){ clearTimeout(to); clearInterval(rep); btn.classList.remove('down'); }
+  btn.addEventListener('pointerdown',function(e){
+    e.preventDefault();
+    try{ btn.setPointerCapture(e.pointerId); }catch(err){}
+    btn.classList.add('down');
+    fn();
+    to=setTimeout(function(){ rep=setInterval(fn,70); },380);
+  });
+  ['pointerup','pointercancel','lostpointercapture'].forEach(function(ev){ btn.addEventListener(ev,halt); });
+  btn.addEventListener('keydown',function(e){
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); fn(); }
+  });
+}
+
+function holdRepeatN(btn,fn){   /* como holdRepeat, pero pasa cuántas repeticiones lleva (para acelerar) */
+  var to=0, rep=0, n=0;
+  function halt(){ clearTimeout(to); clearInterval(rep); btn.classList.remove('down'); }
+  btn.addEventListener('pointerdown',function(e){
+    e.preventDefault();
+    try{ btn.setPointerCapture(e.pointerId); }catch(err){}
+    btn.classList.add('down');
+    n=0; fn(n++);
+    to=setTimeout(function(){ rep=setInterval(function(){ fn(n++); },70); },380);
+  });
+  ['pointerup','pointercancel','lostpointercapture'].forEach(function(ev){ btn.addEventListener(ev,halt); });
+  btn.addEventListener('keydown',function(e){
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); fn(0); }
+  });
+}
+
+/* ---------- Modo Pro: lista de intervalos ---------- */
+var MAX_IV=30;
+function markRows(){
+  var rows=$('#ivRows').children;
+  for(var k=0;k<rows.length;k++){
+    rows[k].classList.toggle('now',!!running&&k===curIdx);
+    rows[k].classList.toggle('past',!!running&&k<curIdx);
+  }
+}
+function updateRow(k){
+  var row=$('#ivRows').children[k]; if(!row) return;
+  row.querySelector('[data-v="sec"]').textContent=fmt(S.intervals[k].sec);
+  row.querySelector('[data-v="bpm"]').textContent=S.intervals[k].bpm;
+}
+function secStep(n){ return n<8?5:(n<24?15:60); }   /* 5 s al principio; acelera si mantienes pulsado */
+function changeIv(k,field,d){
+  if(running) return;
+  var iv=S.intervals[k], v;
+  if(field==='sec') v=Math.round(clamp(iv.sec+d,5,3600)/5)*5;
+  else v=clamp(iv.bpm+d,LIM.bpm[0],LIM.bpm[1]);
+  if(v===iv[field]) return;
+  iv[field]=v; updateRow(k); render(); save();
+}
+function ctlHtml(label,field,k){
+  var who=' del intervalo '+(k+1);
+  return '<div class="iv-lbl">'+label+'</div>'+
+    '<div class="iv-ctl"><button class="step md" type="button" data-a="'+field+'-" aria-label="Bajar '+field.replace('sec','duración').replace('bpm','cadencia')+who+'">−</button>'+
+    '<output class="iv-val" data-v="'+field+'"></output>'+
+    '<button class="step md" type="button" data-a="'+field+'+" aria-label="Subir '+field.replace('sec','duración').replace('bpm','cadencia')+who+'">+</button></div>';
+}
+function buildRows(){
+  var box=$('#ivRows'), n=S.intervals.length;
+  box.innerHTML='';
+  S.intervals.forEach(function(iv,k){
+    var row=document.createElement('div'); row.className='iv';
+    row.innerHTML='<div class="iv-head"><span class="iv-title">Intervalo '+(k+1)+'</span>'+
+      '<button class="iv-del" type="button" aria-label="Eliminar intervalo '+(k+1)+'"'+(n<2?' disabled':'')+'>×</button></div>'+
+      ctlHtml('Duración','sec',k)+ctlHtml('Cadencia · BPM','bpm',k);
+    box.appendChild(row);
+    var acts={
+      'sec-':function(c){ changeIv(k,'sec',-secStep(c)); }, 'sec+':function(c){ changeIv(k,'sec',secStep(c)); },
+      'bpm-':function(){ changeIv(k,'bpm',-1); },           'bpm+':function(){ changeIv(k,'bpm',1); }
+    };
+    Array.prototype.forEach.call(row.querySelectorAll('[data-a]'),function(b){ holdRepeatN(b,acts[b.dataset.a]); });
+    row.querySelector('.iv-del').addEventListener('click',function(){
+      if(running||S.intervals.length<2) return;
+      S.intervals.splice(k,1); buildRows(); render(); save();
+    });
+    updateRow(k);
+  });
+  $('#addIv').disabled=n>=MAX_IV;
+  markRows();
+}
+$('#addIv').addEventListener('click',function(){
+  if(running||S.intervals.length>=MAX_IV) return;
+  var last=S.intervals[S.intervals.length-1];
+  S.intervals.push({sec:last.sec,bpm:last.bpm});   /* el nuevo intervalo copia al anterior; luego se edita */
+  buildRows(); render(); save();
+  try{ $('#ivRows').lastElementChild.scrollIntoView({block:'center',behavior:'smooth'}); }catch(e){}
+});
+function setPro(on,persist){
+  on=!!on;
+  if(running&&on!==S.pro) stop();
+  S.pro=on; ended=false; curIdx=0;
+  $('#proSwitch').setAttribute('aria-checked',on?'true':'false');
+  $('#testWarn').hidden=!on;
+  $('#bpmPanel').hidden=on; $('#proStatus').hidden=!on; $('#proList').hidden=!on;
+  if(on) buildRows();
+  render();
+  if(persist) save();
+}
+$('#proSwitch').addEventListener('click',function(){ setPro(!S.pro,true); });
+$('#testWarn').addEventListener('click',function(){ if(running) return; ensureAudio(); warnBurst(ctx.currentTime+0.03,master); });
+
+var sBpm, sFrac, sFs, sFe, sVol;
+function setBpm(v){ v=clamp(v,LIM.bpm[0],LIM.bpm[1]); if(v===S.bpm) return; S.bpm=v; sBpm.set(v); render(); save(); }
+function setFrac(v){ v=clamp(v,LIM.frac[0],LIM.frac[1]); if(v===S.frac) return; S.frac=v; sFrac.set(v); render(); save(); }
+
+function render(){
+  var cb=curBpm(), T=60/cb, drive=T*S.frac/100, rec=T-drive;
+  $('#bpmOut').textContent=S.bpm;
+  $('#fracOut').textContent=S.frac+' %';
+  segDrive.style.flex='0 0 '+S.frac+'%';
+  segRec.style.flex='0 0 '+(100-S.frac)+'%';
+  $('#cycleLen').textContent=nf2.format(T)+' s por palada';
+  $('#driveSec').textContent=nf2.format(drive)+' s';
+  $('#recSec').textContent=nf2.format(rec)+' s';
+  $('#fsOut').textContent=nf0.format(S.fs); $('#fsNote').textContent=noteName(S.fs);
+  $('#feOut').textContent=nf0.format(S.fe); $('#feNote').textContent=noteName(S.fe);
+  $('#chipS').innerHTML=nf0.format(S.fs)+' <small>Hz · '+noteName(S.fs)+'</small>';
+  $('#chipE').innerHTML=nf0.format(S.fe)+' <small>Hz · '+noteName(S.fe)+'</small>';
+  $('#volOut').textContent=S.vol;
+  if(S.pro){
+    $('#proBpmLbl').textContent=cb+' BPM';
+    $('#ivTotal').textContent='Total '+fmt(totalSec());
+    if(!running){
+      renderPro();
+      $('#playSub').textContent=S.intervals.length+' interv. · '+fmt(totalSec())+' · fin al '+S.frac+' %';
+    }
+  } else {
+    $('#playSub').textContent=S.bpm+' BPM · fin al '+S.frac+' %';
+  }
+}
+
+sBpm=makeSlider($('#bpmSlider'),{min:LIM.bpm[0],max:LIM.bpm[1],step:1,value:S.bpm,label:'Cadencia en BPM',
+  text:function(v){return v+' paladas por minuto'},
+  onInput:function(v){S.bpm=v;render();}, onChange:save});
+sFrac=makeSlider($('#fracSlider'),{min:LIM.frac[0],max:LIM.frac[1],step:1,value:S.frac,label:'Fin de remada, porcentaje del ciclo',
+  text:function(v){return v+' por ciento'},
+  onInput:function(v){S.frac=v;render();}, onChange:save});
+sFs=makeSlider($('#fsSlider'),{min:LIM.fs[0],max:LIM.fs[1],step:1,log:true,vertical:true,value:S.fs,label:'Frecuencia del tono de inicio',
+  text:function(v){return v+' hercios, '+noteName(v)},
+  onInput:function(v){S.fs=v;render();}, onChange:function(){save();preview('s');}});
+sFe=makeSlider($('#feSlider'),{min:LIM.fe[0],max:LIM.fe[1],step:1,log:true,vertical:true,value:S.fe,label:'Frecuencia del tono de fin',
+  text:function(v){return v+' hercios, '+noteName(v)},
+  onInput:function(v){S.fe=v;render();}, onChange:function(){save();preview('e');}});
+sVol=makeSlider($('#volSlider'),{min:0,max:100,step:1,value:S.vol,label:'Volumen',
+  text:function(v){return v+' por ciento'},
+  onInput:function(v){S.vol=v;applyVolume();render();}, onChange:function(){save();preview('s');}});
+$('#fsSlider').style.setProperty('--c','var(--start)');
+$('#feSlider').style.setProperty('--c','var(--end)');
+$('#feSlider').style.setProperty('--tc','var(--end)');
+$('#fsSlider').style.setProperty('--tc','var(--start)');
+$('#volSlider').style.setProperty('--c','var(--ink)');
+
+holdRepeat($('#bpmDown'),function(){setBpm(S.bpm-1)});
+holdRepeat($('#bpmUp'),function(){setBpm(S.bpm+1)});
+holdRepeat($('#fracDown'),function(){setFrac(S.frac-1)});
+holdRepeat($('#fracUp'),function(){setFrac(S.frac+1)});
+
+setPro(S.pro,false);
+
+/* ---------- PWA: funcionamiento sin conexión ---------- */
+var inApp=/RitmoRemadaApp/.test(navigator.userAgent) || !!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
+if('serviceWorker' in navigator && !inApp && /^https?:$/.test(location.protocol)){
+  window.addEventListener('load',function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+}
+})();
+</script>
+</body>
+</html>
