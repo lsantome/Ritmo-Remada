@@ -2,6 +2,12 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [1.5.0] - 2026-10-31
+
+### Añadido
+- **Modo Pro: «Borrar todos».** Un botón al principio de la lista de intervalos los elimina en una sola pulsación y deja un único intervalo de partida (2:00 a 24 BPM), porque la lista no puede quedar vacía. Durante 8 segundos el mismo botón pasa a «Deshacer» y recupera la lista completa; si antes se edita, se añade un intervalo o se inicia la sesión, el «Deshacer» desaparece. Con la sesión en marcha está bloqueado, como el resto de la lista.
+- Prueba de navegador `tests/e2e/pro_borrar.py` y comprobación estática en `npm test`.
+
 ## [1.4.0] - 2026-10-23
 
 Primera versión en este repositorio. La funcionalidad es la de la 1.4 repartida como APK y PWA antes de existir el repo; cambia la estructura, la compilación y el empaquetado.
