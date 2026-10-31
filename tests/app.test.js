@@ -41,3 +41,14 @@ test('dentro del APK no se registra el service worker', () => {
   const html = read('index.html');
   assert(/isNativePlatform/.test(html) && /RitmoRemadaApp/.test(html));
 });
+
+test('«Borrar todos» de los intervalos Pro: botón, bloqueo en sesión y red de seguridad (Deshacer)', () => {
+  const html = read('index.html');
+  const js = pageScript();
+  assert(/<button[^>]*id="clearIv"/.test(html), 'falta el botón #clearIv');
+  assert(/#proList\.locked[^{]*\.clr/.test(html), 'el botón no se bloquea con la sesión en marcha');
+  assert(/function showUndo\(/.test(js) && /function hideUndo\(/.test(js), 'falta el «Deshacer»');
+  assert(/getElementById|\$\('#clearIv'\)\.addEventListener\('click'/.test(js) && /if\(running\) return;/.test(js.slice(js.indexOf("$('#clearIv').addEventListener"))), 'el manejador no se protege con la sesión en marcha');
+  /* la lista nunca queda vacía: el borrado deja un intervalo de partida, no un array vacío */
+  assert(/S\.intervals=\[\{sec:IV_START\.sec,bpm:IV_START\.bpm\}\]/.test(js));
+});

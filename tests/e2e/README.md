@@ -12,6 +12,7 @@ BASE_URL=http://localhost:8766/ python3 tests/e2e/version_visible.py
 |---|---|---|
 | `version_visible.py` | La versión se ve en Ajustes (`desarrollo` o `vX.Y.Z · build hash · fecha`) y no hay errores de página | **Sí** (código de salida ≠ 0) |
 | `pro_ui.py` | Modo Pro: duraciones, cadencias, añadir/eliminar intervalos, límites, persistencia | No: imprime resultados para revisarlos |
+| `pro_borrar.py` | Modo Pro: «Borrar todos» deja un intervalo de partida, «Deshacer», caducidad, bloqueo en sesión y persistencia | **Sí** (código de salida ≠ 0) |
 | `audio_pitido.py` | Ajustes, tema, offline y medidas del pitido (pico, RMS, centroide) | No: imprime resultados para revisarlos |
 
 Variables: `BASE_URL` (por defecto `http://localhost:8766/`) y `OUT_DIR` (capturas y datos, por defecto `/tmp/ritmo-e2e/`).
