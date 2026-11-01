@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ritmo de Remada</title>
-<meta name="description" content="Metrónomo de dos tonos para marcar el inicio y el fin de la palada en una trainera.">
+<meta name="description" content="Metrónomo de dos tonos para marcar el inicio y el fin de la palada en una trainera." id="metaDesc">
 <meta name="theme-color" content="#edf3f4" id="metaTheme">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -152,6 +152,8 @@ h2{font:600 15px var(--f-body); letter-spacing:.09em; text-transform:uppercase}
 
 /* Tema */
 .opts{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+.opts.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.opts.three .opt{height:64px; font-size:21px; letter-spacing:.03em; padding:0 4px}
 .opt{height:72px; border:2px solid var(--line); background:var(--surface-2); color:var(--ink); border-radius:16px; display:flex; align-items:center; justify-content:center; gap:10px; font:700 26px/1 var(--f-display); letter-spacing:.05em; text-transform:uppercase; padding:0}
 .opt svg{width:28px; height:28px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
 .opt[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--bg)}
@@ -218,32 +220,32 @@ button[disabled]{opacity:.35; pointer-events:none}
         <h1>Ritmo de remada</h1>
         <span class="cycle-len" id="cycleLen">2,00 s por palada</span>
       </div>
-      <button class="icon-btn" id="openSettings" type="button" aria-label="Abrir ajustes">
+      <button class="icon-btn" id="openSettings" type="button" aria-label="Abrir ajustes" data-i18n-aria="openSettings">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/><circle cx="8" cy="6" r="2.6" fill="var(--surface)"/><circle cx="16" cy="12" r="2.6" fill="var(--surface)"/><circle cx="10" cy="18" r="2.6" fill="var(--surface)"/></svg>
       </button>
     </div>
 
-    <section aria-label="Ciclo de la palada">
-      <div class="ruler" id="ruler" role="img" aria-label="Reparto de la palada entre remada y recobro">
+    <section aria-label="Ciclo de la palada" data-i18n-aria="strokeCycle">
+      <div class="ruler" id="ruler" role="img" aria-label="Reparto de la palada entre remada y recobro" data-i18n-aria="ruler">
         <div class="seg seg-drive" id="segDrive"></div>
         <div class="seg seg-rec" id="segRec"></div>
         <div class="playhead" id="playhead"></div>
       </div>
       <div class="cycle-read">
-        <span><i class="dot s"></i>Remada <b id="driveSec">1,00 s</b></span>
-        <span><i class="dot e"></i>Recobro <b id="recSec">1,00 s</b></span>
+        <span><i class="dot s"></i><span data-i18n="drive">Remada</span> <b id="driveSec">1,00 s</b></span>
+        <span><i class="dot e"></i><span data-i18n="recovery">Recobro</span> <b id="recSec">1,00 s</b></span>
       </div>
     </section>
 
     <section class="panel" id="bpmPanel" aria-labelledby="bpmTitle">
       <div class="panel-head">
-        <h2 id="bpmTitle">Cadencia</h2>
-        <span class="unit">BPM · paladas por minuto</span>
+        <h2 id="bpmTitle" data-i18n="cadence">Cadencia</h2>
+        <span class="unit" data-i18n="cadenceUnit">BPM · paladas por minuto</span>
       </div>
       <div class="stepper">
-        <button class="step" id="bpmDown" type="button" aria-label="Bajar un BPM">−</button>
+        <button class="step" id="bpmDown" type="button" aria-label="Bajar un BPM" data-i18n-aria="bpmDown">−</button>
         <output class="big" id="bpmOut" for="bpmSlider">30</output>
-        <button class="step" id="bpmUp" type="button" aria-label="Subir un BPM">+</button>
+        <button class="step" id="bpmUp" type="button" aria-label="Subir un BPM" data-i18n-aria="bpmUp">+</button>
       </div>
       <div id="bpmSlider"></div>
     </section>
@@ -261,35 +263,35 @@ button[disabled]{opacity:.35; pointer-events:none}
     <section class="panel" aria-labelledby="fracTitle">
       <div class="panel-head">
         <div>
-          <h2 id="fracTitle">Fin de remada</h2>
-          <p class="unit">% del ciclo desde el tono de inicio</p>
+          <h2 id="fracTitle" data-i18n="driveEnd">Fin de remada</h2>
+          <p class="unit" data-i18n="driveEndSub">% del ciclo desde el tono de inicio</p>
         </div>
         <output class="val" id="fracOut" for="fracSlider">50 %</output>
       </div>
       <div class="row-slider">
-        <button class="step sm" id="fracDown" type="button" aria-label="Bajar un 1 %">−</button>
+        <button class="step sm" id="fracDown" type="button" aria-label="Bajar un 1 %" data-i18n-aria="fracDown">−</button>
         <div id="fracSlider"></div>
-        <button class="step sm" id="fracUp" type="button" aria-label="Subir un 1 %">+</button>
+        <button class="step sm" id="fracUp" type="button" aria-label="Subir un 1 %" data-i18n-aria="fracUp">+</button>
       </div>
     </section>
 
     <section class="panel" id="proList" aria-labelledby="ivTitle" hidden>
       <div class="panel-head">
-        <h2 id="ivTitle">Intervalos</h2>
+        <h2 id="ivTitle" data-i18n="intervals">Intervalos</h2>
         <span class="unit" id="ivTotal">Total 3:00</span>
       </div>
       <button class="clr" id="clearIv" type="button" aria-label="Borrar todos los intervalos" aria-live="polite">Borrar todos</button>
       <div class="iv-list" id="ivRows"></div>
-      <button class="add" id="addIv" type="button" aria-label="Añadir intervalo"><b>+</b>Añadir intervalo</button>
+      <button class="add" id="addIv" type="button" aria-label="Añadir intervalo" data-i18n-aria="addIv"><b>+</b><span data-i18n="addIv">Añadir intervalo</span></button>
     </section>
 
-    <section class="chips" aria-label="Tonos activos">
-      <button class="chip" type="button" data-open-settings aria-label="Frecuencia del tono de inicio, abrir ajustes">
-        <span class="chip-h"><i class="dot s"></i>Inicio</span>
+    <section class="chips" aria-label="Tonos activos" data-i18n-aria="activeTones">
+      <button class="chip" type="button" data-open-settings aria-label="Frecuencia del tono de inicio, abrir ajustes" data-i18n-aria="chipStartAria">
+        <span class="chip-h"><i class="dot s"></i><span data-i18n="toneStart">Inicio</span></span>
         <span class="chip-v" id="chipS">1400 <small>Hz</small></span>
       </button>
-      <button class="chip" type="button" data-open-settings aria-label="Frecuencia del tono de fin, abrir ajustes">
-        <span class="chip-h"><i class="dot e"></i>Fin</span>
+      <button class="chip" type="button" data-open-settings aria-label="Frecuencia del tono de fin, abrir ajustes" data-i18n-aria="chipEndAria">
+        <span class="chip-h"><i class="dot e"></i><span data-i18n="toneEnd">Fin</span></span>
         <span class="chip-v" id="chipE">440 <small>Hz</small></span>
       </button>
     </section>
@@ -298,59 +300,68 @@ button[disabled]{opacity:.35; pointer-events:none}
   <!-- PANTALLA DE AJUSTES -->
   <div class="view" id="viewSettings" hidden>
     <div class="bar back">
-      <button class="back-btn" id="backBtn" type="button" aria-label="Volver a la pantalla principal">
+      <button class="back-btn" id="backBtn" type="button" aria-label="Volver a la pantalla principal" data-i18n-aria="backAria">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
-        Volver
+        <span data-i18n="back">Volver</span>
       </button>
-      <h1>Ajustes</h1>
+      <h1 data-i18n="settings">Ajustes</h1>
     </div>
 
-    <h2 class="sec-h">Modo Pro</h2>
-    <section class="panel" aria-label="Modo Pro">
+    <h2 class="sec-h" data-i18n="proMode">Modo Pro</h2>
+    <section class="panel" aria-label="Modo Pro" data-i18n-aria="proMode">
       <button class="switch" id="proSwitch" type="button" role="switch" aria-checked="false">
-        <span class="sw-text"><b>Intervalos</b><small>Duración y cadencia distintas en cada tramo. Avisa con 4 tonos agudos a 10 s, a 5 s y al terminar cada intervalo.</small></span>
+        <span class="sw-text"><b data-i18n="intervals">Intervalos</b><small data-i18n="proDesc">Duración y cadencia distintas en cada tramo. Avisa con 4 tonos agudos a 10 s, a 5 s y al terminar cada intervalo.</small></span>
         <span class="sw-track" aria-hidden="true"><span class="sw-thumb"></span></span>
       </button>
-      <button class="opt" id="testWarn" type="button" hidden>Probar aviso</button>
+      <button class="opt" id="testWarn" type="button" hidden data-i18n="testWarn">Probar aviso</button>
     </section>
 
-    <h2 class="sec-h">Frecuencia</h2>
-    <section class="tones" aria-label="Frecuencias">
+    <h2 class="sec-h" data-i18n="frequency">Frecuencia</h2>
+    <section class="tones" aria-label="Frecuencias" data-i18n-aria="frequencies">
       <article class="tone" id="toneStart">
-        <div class="tone-head"><i class="dot s"></i><h2>Inicio</h2><span class="hint">agudo</span></div>
+        <div class="tone-head"><i class="dot s"></i><h2 data-i18n="toneStart">Inicio</h2><span class="hint" data-i18n="high">agudo</span></div>
         <output class="hz"><span id="fsOut">1400</span><small>Hz</small></output>
         <p class="note" id="fsNote">Fa6</p>
         <div id="fsSlider"></div>
       </article>
       <article class="tone end" id="toneEnd">
-        <div class="tone-head"><i class="dot e"></i><h2>Fin</h2><span class="hint">grave</span></div>
+        <div class="tone-head"><i class="dot e"></i><h2 data-i18n="toneEnd">Fin</h2><span class="hint" data-i18n="low">grave</span></div>
         <output class="hz"><span id="feOut">440</span><small>Hz</small></output>
         <p class="note" id="feNote">La4</p>
         <div id="feSlider"></div>
       </article>
     </section>
 
-    <h2 class="sec-h">Volumen</h2>
+    <h2 class="sec-h" data-i18n="volume">Volumen</h2>
     <section class="panel" aria-labelledby="volTitle">
       <div class="panel-head">
-        <h2 id="volTitle">Volumen general</h2>
+        <h2 id="volTitle" data-i18n="volumeMaster">Volumen general</h2>
         <output class="val" id="volOut" for="volSlider" style="font-size:36px">85</output>
       </div>
       <div id="volSlider"></div>
     </section>
 
-    <h2 class="sec-h">Apariencia</h2>
+    <h2 class="sec-h" data-i18n="appearance">Apariencia</h2>
     <section class="panel" aria-labelledby="themeTitle">
-      <h2 id="themeTitle">Tema</h2>
+      <h2 id="themeTitle" data-i18n="theme">Tema</h2>
       <div class="opts" role="group" aria-labelledby="themeTitle">
         <button class="opt" id="themeLight" type="button" aria-pressed="true">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>
-          Claro
+          <span data-i18n="light">Claro</span>
         </button>
         <button class="opt" id="themeDark" type="button" aria-pressed="false">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
-          Oscuro
+          <span data-i18n="dark">Oscuro</span>
         </button>
+      </div>
+    </section>
+
+    <h2 class="sec-h">Idioma · Language</h2>
+    <section class="panel" aria-label="Idioma · Language">
+      <div class="opts three" role="group" aria-label="Idioma · Language">
+        <button class="opt" id="langAuto" type="button" aria-pressed="true">Auto</button>
+        <button class="opt" id="langEs" type="button" aria-pressed="false">Español</button>
+        <button class="opt" id="langEn" type="button" aria-pressed="false">English</button>
       </div>
     </section>
 
@@ -454,27 +465,113 @@ function makeProScheduler(deps){
 }
 /*SCHED-END*/
 
+/*I18N-START*/
+/* Textos de la interfaz. «es» es el idioma de origen; «en» debe tener exactamente las mismas claves y marcadores {x}. */
+var I18N={
+ es:{
+  perStroke:'{v} s por palada', drive:'Remada', recovery:'Recobro',
+  cadence:'Cadencia', cadenceUnit:'BPM · paladas por minuto',
+  driveEnd:'Fin de remada', driveEndSub:'% del ciclo desde el tono de inicio',
+  intervals:'Intervalos', addIv:'Añadir intervalo', clearAll:'Borrar todos', undo:'Deshacer',
+  toneStart:'Inicio', toneEnd:'Fin', high:'agudo', low:'grave',
+  back:'Volver', settings:'Ajustes', proMode:'Modo Pro',
+  proDesc:'Duración y cadencia distintas en cada tramo. Avisa con 4 tonos agudos a 10 s, a 5 s y al terminar cada intervalo.',
+  testWarn:'Probar aviso', frequency:'Frecuencia', volume:'Volumen', volumeMaster:'Volumen general',
+  appearance:'Apariencia', theme:'Tema', light:'Claro', dark:'Oscuro',
+  play:'Iniciar', stop:'Parar',
+  openSettings:'Abrir ajustes', strokeCycle:'Ciclo de la palada', ruler:'Reparto de la palada entre remada y recobro',
+  bpmDown:'Bajar un BPM', bpmUp:'Subir un BPM', fracDown:'Bajar un 1 %', fracUp:'Subir un 1 %',
+  clearAllAria:'Borrar todos los intervalos', undoAria:'Deshacer: recuperar los intervalos borrados',
+  activeTones:'Tonos activos', chipStartAria:'Frecuencia del tono de inicio, abrir ajustes', chipEndAria:'Frecuencia del tono de fin, abrir ajustes',
+  backAria:'Volver a la pantalla principal', frequencies:'Frecuencias',
+  intervalOf:'Intervalo {k} de {n}', next:'Siguiente: {d} · {b} BPM', lastInterval:'Último intervalo',
+  remaining:'Quedan {d}', sessionDone:'Sesión terminada', singleInterval:'Intervalo único', total:'Total {d}',
+  playSubRun:'Intervalo {k}/{n} · {d} · {b} BPM', playSubPro:'{n} interv. · {d} · fin al {f} %', playSub:'{b} BPM · fin al {f} %',
+  intervalN:'Intervalo {k}', durationLbl:'Duración', cadenceBpmLbl:'Cadencia · BPM',
+  decDur:'Bajar duración del intervalo {k}', incDur:'Subir duración del intervalo {k}',
+  decCad:'Bajar cadencia del intervalo {k}', incCad:'Subir cadencia del intervalo {k}', delIv:'Eliminar intervalo {k}',
+  sliderBpm:'Cadencia en BPM', sliderBpmText:'{v} paladas por minuto',
+  sliderFrac:'Fin de remada, porcentaje del ciclo', percentText:'{v} por ciento',
+  sliderFs:'Frecuencia del tono de inicio', sliderFe:'Frecuencia del tono de fin', hzText:'{v} hercios, {n}',
+  version:'Versión: desarrollo',
+  metaDesc:'Metrónomo de dos tonos para marcar el inicio y el fin de la palada en una trainera.'
+ },
+ en:{
+  perStroke:'{v} s per stroke', drive:'Drive', recovery:'Recovery',
+  cadence:'Stroke rate', cadenceUnit:'BPM · strokes per minute',
+  driveEnd:'Drive end', driveEndSub:'% of the cycle from the start tone',
+  intervals:'Intervals', addIv:'Add interval', clearAll:'Clear all', undo:'Undo',
+  toneStart:'Start', toneEnd:'End', high:'high', low:'low',
+  back:'Back', settings:'Settings', proMode:'Pro mode',
+  proDesc:'A different duration and stroke rate for each section. Warns with 4 high tones at 10 s, at 5 s and at the end of each interval.',
+  testWarn:'Test warning', frequency:'Frequency', volume:'Volume', volumeMaster:'Master volume',
+  appearance:'Appearance', theme:'Theme', light:'Light', dark:'Dark',
+  play:'Start', stop:'Stop',
+  openSettings:'Open settings', strokeCycle:'Stroke cycle', ruler:'Split of the stroke between drive and recovery',
+  bpmDown:'Decrease by 1 BPM', bpmUp:'Increase by 1 BPM', fracDown:'Decrease by 1 %', fracUp:'Increase by 1 %',
+  clearAllAria:'Clear all intervals', undoAria:'Undo: restore the cleared intervals',
+  activeTones:'Active tones', chipStartAria:'Start tone frequency, open settings', chipEndAria:'End tone frequency, open settings',
+  backAria:'Back to the main screen', frequencies:'Frequencies',
+  intervalOf:'Interval {k} of {n}', next:'Next: {d} · {b} BPM', lastInterval:'Last interval',
+  remaining:'Left {d}', sessionDone:'Session finished', singleInterval:'Single interval', total:'Total {d}',
+  playSubRun:'Interval {k}/{n} · {d} · {b} BPM', playSubPro:'{n} int. · {d} · ends at {f} %', playSub:'{b} BPM · ends at {f} %',
+  intervalN:'Interval {k}', durationLbl:'Duration', cadenceBpmLbl:'Stroke rate · BPM',
+  decDur:'Decrease duration of interval {k}', incDur:'Increase duration of interval {k}',
+  decCad:'Decrease stroke rate of interval {k}', incCad:'Increase stroke rate of interval {k}', delIv:'Delete interval {k}',
+  sliderBpm:'Stroke rate in BPM', sliderBpmText:'{v} strokes per minute',
+  sliderFrac:'Drive end, percentage of the cycle', percentText:'{v} percent',
+  sliderFs:'Start tone frequency', sliderFe:'End tone frequency', hzText:'{v} hertz, {n}',
+  version:'Version: development',
+  metaDesc:'Two-tone metronome that marks the start and the end of the stroke in a trainera rowing boat.'
+ }
+};
+/* Idioma del dispositivo: el primero de su lista de preferencias que sea español o inglés; si no hay ninguno, inglés. */
+function pickLang(list){
+  for(var i=0;i<list.length;i++){
+    var p=String(list[i]||'').toLowerCase().split(/[-_]/)[0];
+    if(p==='es'||p==='en') return p;
+  }
+  return 'en';
+}
+function fillTpl(s,a){ return a? s.replace(/\{(\w+)\}/g,function(m,k){ return a[k]!==undefined?a[k]:m; }) : s; }
+/*I18N-END*/
+
 (function(){
 'use strict';
 
 var $=function(s){return document.querySelector(s)};
 var clamp=function(v,a,b){return Math.min(b,Math.max(a,v))};
-var nf2=new Intl.NumberFormat('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});
-var nf0=new Intl.NumberFormat('es-ES',{maximumFractionDigits:0});
-var NOTES=['Do','Do#','Re','Re#','Mi','Fa','Fa#','Sol','Sol#','La','La#','Si'];
+/* Idioma efectivo (LANG) y formatos que dependen de él. Se fija tras leer los ajustes (S.lang) y se reaplica al cambiarlo. */
+var LANG='es', nf2, nf0;
+var NOTES={es:['Do','Do#','Re','Re#','Mi','Fa','Fa#','Sol','Sol#','La','La#','Si'], en:['C','C#','D','D#','E','F','F#','G','G#','A','A#','B']};
+function t(k,a){
+  var s=(I18N[LANG]||I18N.es)[k];
+  if(s===undefined) s=I18N.es[k];
+  return s===undefined? k : fillTpl(s,a);
+}
+function deviceLang(){
+  var l=[];
+  try{ l=(navigator.languages&&navigator.languages.length)? Array.prototype.slice.call(navigator.languages) : (navigator.language?[navigator.language]:[]); }catch(e){}
+  return pickLang(l);
+}
+function setFormats(){
+  var loc=LANG==='es'?'es-ES':'en-US';
+  nf2=new Intl.NumberFormat(loc,{minimumFractionDigits:2,maximumFractionDigits:2});
+  nf0=new Intl.NumberFormat(loc,{maximumFractionDigits:0,useGrouping:false});
+}
 function noteName(f){
   var n=Math.round(69+12*Math.log2(f/440));
-  return NOTES[((n%12)+12)%12]+(Math.floor(n/12)-1);
+  return NOTES[LANG][((n%12)+12)%12]+(Math.floor(n/12)-1);
 }
 
 /* ---------- Versión (la sella scripts/version.js al construir; en desarrollo queda «desarrollo») ---------- */
 const APP_VERSION = 'desarrollo';
 const APP_BUILD = '';
-$('#verOut').textContent = APP_VERSION==='desarrollo' ? 'Versión: desarrollo' : 'v'+APP_VERSION+' · build '+APP_BUILD;
+function renderVersion(){ $('#verOut').textContent = APP_VERSION==='desarrollo' ? t('version') : 'v'+APP_VERSION+' · build '+APP_BUILD; }
 
 /* ---------- Ajustes ---------- */
 var KEY='ritmo-remada-v1';
-var DEF={bpm:30,frac:50,fs:1400,fe:440,vol:85,theme:'light',pro:false};
+var DEF={bpm:30,frac:50,fs:1400,fe:440,vol:85,theme:'light',pro:false,lang:'auto'};
 var LIM={bpm:[10,80],frac:[10,90],fs:[400,3200],fe:[100,1000],vol:[0,100]};
 function load(){
   var S=Object.assign({},DEF);
@@ -485,6 +582,7 @@ function load(){
       var v=Number(o[k]); if(isFinite(v)&&o[k]!==null&&o[k]!=='') S[k]=clamp(Math.round(v),LIM[k][0],LIM[k][1]);
     });
     if(o.theme==='dark') S.theme='dark';
+    if(o.lang==='es'||o.lang==='en') S.lang=o.lang;   /* sin valor guardado: «auto» (el del dispositivo) */
     if(o.pro===true) S.pro=true;
     if(Array.isArray(o.intervals)){
       var arr=[];
@@ -498,6 +596,8 @@ function load(){
   return S;
 }
 var S=load();
+LANG=(S.lang==='es'||S.lang==='en')? S.lang : deviceLang();
+setFormats();
 var saveTimer=0;
 function save(){
   clearTimeout(saveTimer);
@@ -690,20 +790,20 @@ function updatePro(now){   /* sesión en marcha: cuenta atrás del intervalo act
   var tl=proTimeline(now), n=S.intervals.length;
   if(tl.k!==curIdx){ curIdx=tl.k; render(); markRows(); }
   var cur=S.intervals[tl.k], nx=S.intervals[tl.k+1];
-  setTxt($('#proState'),'Intervalo '+(tl.k+1)+' de '+n);
+  setTxt($('#proState'),t('intervalOf',{k:tl.k+1,n:n}));
   setTxt($('#proClock'),fmt(tl.rem));
   $('#proBar').style.width=(tl.frac*100).toFixed(1)+'%';
-  setTxt($('#proNext'),nx?'Siguiente: '+fmt(nx.sec)+' · '+nx.bpm+' BPM':'Último intervalo');
-  setTxt($('#proLeft'),'Quedan '+fmt(tl.left));
-  setTxt($('#playSub'),'Intervalo '+(tl.k+1)+'/'+n+' · '+fmt(tl.rem)+' · '+cur.bpm+' BPM');
+  setTxt($('#proNext'),nx?t('next',{d:fmt(nx.sec),b:nx.bpm}):t('lastInterval'));
+  setTxt($('#proLeft'),t('remaining',{d:fmt(tl.left)}));
+  setTxt($('#playSub'),t('playSubRun',{k:tl.k+1,n:n,d:fmt(tl.rem),b:cur.bpm}));
 }
 function renderPro(){   /* en reposo */
   var n=S.intervals.length, first=S.intervals[0], second=S.intervals[1];
-  setTxt($('#proState'),ended?'Sesión terminada':'Intervalo 1 de '+n);
+  setTxt($('#proState'),ended?t('sessionDone'):t('intervalOf',{k:1,n:n}));
   setTxt($('#proClock'),ended?'0:00':fmt(first.sec));
   $('#proBar').style.width=ended?'100%':'0%';
-  setTxt($('#proNext'),second?'Siguiente: '+fmt(second.sec)+' · '+second.bpm+' BPM':'Intervalo único');
-  setTxt($('#proLeft'),'Total '+fmt(totalSec()));
+  setTxt($('#proNext'),second?t('next',{d:fmt(second.sec),b:second.bpm}):t('singleInterval'));
+  setTxt($('#proLeft'),t('total',{d:fmt(totalSec())}));
 }
 function frame(){
   if(!running||!ctx) return;
@@ -723,7 +823,7 @@ function setRunning(on){
   running=on;
   playBtn.classList.toggle('on',on);
   playBtn.setAttribute('aria-pressed',on?'true':'false');
-  $('#playLabel').textContent=on?'Parar':'Iniciar';
+  $('#playLabel').textContent=on?t('stop'):t('play');
   playhead.style.opacity=on?1:0;
   $('#proList').classList.toggle('locked',on);
   markRows();
@@ -767,7 +867,7 @@ function makeSlider(root,o){
   root.classList.add('slider',vertical?'v':'h');
   root.setAttribute('role','slider'); root.tabIndex=0;
   root.setAttribute('aria-orientation',vertical?'vertical':'horizontal');
-  root.setAttribute('aria-label',o.label);
+  root.setAttribute('aria-label',o.label());
   root.setAttribute('aria-valuemin',o.min); root.setAttribute('aria-valuemax',o.max);
   root.innerHTML='<div class="trk"><div class="fill"></div></div><div class="thumb"></div>';
   var thumb=root.querySelector('.thumb');
@@ -826,7 +926,7 @@ function makeSlider(root,o){
     if(nv!==value){ value=nv; draw(); if(o.onInput) o.onInput(nv); if(o.onChange) o.onChange(nv); }
   });
   draw();
-  return { set:function(v){ value=snap(v); draw(); }, get:function(){ return value; } };
+  return { set:function(v){ value=snap(v); draw(); }, get:function(){ return value; }, relabel:function(){ root.setAttribute('aria-label',o.label()); draw(); } };
 }
 
 function holdRepeat(btn,fn){
@@ -887,20 +987,20 @@ function changeIv(k,field,d){
   updateRow(k); render(); save();
 }
 function ctlHtml(label,field,k){
-  var who=' del intervalo '+(k+1);
+  var dec=t(field==='sec'?'decDur':'decCad',{k:k+1}), inc=t(field==='sec'?'incDur':'incCad',{k:k+1});
   return '<div class="iv-lbl">'+label+'</div>'+
-    '<div class="iv-ctl"><button class="step md" type="button" data-a="'+field+'-" aria-label="Bajar '+field.replace('sec','duración').replace('bpm','cadencia')+who+'">−</button>'+
+    '<div class="iv-ctl"><button class="step md" type="button" data-a="'+field+'-" aria-label="'+dec+'">−</button>'+
     '<output class="iv-val" data-v="'+field+'"></output>'+
-    '<button class="step md" type="button" data-a="'+field+'+" aria-label="Subir '+field.replace('sec','duración').replace('bpm','cadencia')+who+'">+</button></div>';
+    '<button class="step md" type="button" data-a="'+field+'+" aria-label="'+inc+'">+</button></div>';
 }
 function buildRows(){
   var box=$('#ivRows'), n=S.intervals.length;
   box.innerHTML='';
   S.intervals.forEach(function(iv,k){
     var row=document.createElement('div'); row.className='iv';
-    row.innerHTML='<div class="iv-head"><span class="iv-title">Intervalo '+(k+1)+'</span>'+
-      '<button class="iv-del" type="button" aria-label="Eliminar intervalo '+(k+1)+'"'+(n<2?' disabled':'')+'>×</button></div>'+
-      ctlHtml('Duración','sec',k)+ctlHtml('Cadencia · BPM','bpm',k);
+    row.innerHTML='<div class="iv-head"><span class="iv-title">'+t('intervalN',{k:k+1})+'</span>'+
+      '<button class="iv-del" type="button" aria-label="'+t('delIv',{k:k+1})+'"'+(n<2?' disabled':'')+'>×</button></div>'+
+      ctlHtml(t('durationLbl'),'sec',k)+ctlHtml(t('cadenceBpmLbl'),'bpm',k);
     box.appendChild(row);
     var acts={
       'sec-':function(c){ changeIv(k,'sec',-secStep(c)); }, 'sec+':function(c){ changeIv(k,'sec',secStep(c)); },
@@ -930,12 +1030,12 @@ var IV_START={sec:120,bpm:24}, undoIv=null, undoTimer=0;
 function ivIsStart(){ var a=S.intervals; return a.length===1&&a[0].sec===IV_START.sec&&a[0].bpm===IV_START.bpm; }
 function hideUndo(){
   clearTimeout(undoTimer); undoIv=null;
-  var b=$('#clearIv'); b.classList.remove('undo'); b.textContent='Borrar todos';
-  b.setAttribute('aria-label','Borrar todos los intervalos'); b.disabled=ivIsStart();
+  var b=$('#clearIv'); b.classList.remove('undo'); b.textContent=t('clearAll');
+  b.setAttribute('aria-label',t('clearAllAria')); b.disabled=ivIsStart();
 }
 function showUndo(){
-  var b=$('#clearIv'); b.classList.add('undo'); b.textContent='Deshacer';
-  b.setAttribute('aria-label','Deshacer: recuperar los intervalos borrados'); b.disabled=false;
+  var b=$('#clearIv'); b.classList.add('undo'); b.textContent=t('undo');
+  b.setAttribute('aria-label',t('undoAria')); b.disabled=false;
   undoTimer=setTimeout(hideUndo,8000);
 }
 $('#clearIv').addEventListener('click',function(){
@@ -972,7 +1072,7 @@ function render(){
   $('#fracOut').textContent=S.frac+' %';
   segDrive.style.flex='0 0 '+S.frac+'%';
   segRec.style.flex='0 0 '+(100-S.frac)+'%';
-  $('#cycleLen').textContent=nf2.format(T)+' s por palada';
+  $('#cycleLen').textContent=t('perStroke',{v:nf2.format(T)});
   $('#driveSec').textContent=nf2.format(drive)+' s';
   $('#recSec').textContent=nf2.format(rec)+' s';
   $('#fsOut').textContent=nf0.format(S.fs); $('#fsNote').textContent=noteName(S.fs);
@@ -982,30 +1082,30 @@ function render(){
   $('#volOut').textContent=S.vol;
   if(S.pro){
     $('#proBpmLbl').textContent=cb+' BPM';
-    $('#ivTotal').textContent='Total '+fmt(totalSec());
+    $('#ivTotal').textContent=t('total',{d:fmt(totalSec())});
     if(!running){
       renderPro();
-      $('#playSub').textContent=S.intervals.length+' interv. · '+fmt(totalSec())+' · fin al '+S.frac+' %';
+      $('#playSub').textContent=t('playSubPro',{n:S.intervals.length,d:fmt(totalSec()),f:S.frac});
     }
   } else {
-    $('#playSub').textContent=S.bpm+' BPM · fin al '+S.frac+' %';
+    $('#playSub').textContent=t('playSub',{b:S.bpm,f:S.frac});
   }
 }
 
-sBpm=makeSlider($('#bpmSlider'),{min:LIM.bpm[0],max:LIM.bpm[1],step:1,value:S.bpm,label:'Cadencia en BPM',
-  text:function(v){return v+' paladas por minuto'},
+sBpm=makeSlider($('#bpmSlider'),{min:LIM.bpm[0],max:LIM.bpm[1],step:1,value:S.bpm,label:function(){return t('sliderBpm')},
+  text:function(v){return t('sliderBpmText',{v:v})},
   onInput:function(v){S.bpm=v;render();}, onChange:save});
-sFrac=makeSlider($('#fracSlider'),{min:LIM.frac[0],max:LIM.frac[1],step:1,value:S.frac,label:'Fin de remada, porcentaje del ciclo',
-  text:function(v){return v+' por ciento'},
+sFrac=makeSlider($('#fracSlider'),{min:LIM.frac[0],max:LIM.frac[1],step:1,value:S.frac,label:function(){return t('sliderFrac')},
+  text:function(v){return t('percentText',{v:v})},
   onInput:function(v){S.frac=v;render();}, onChange:save});
-sFs=makeSlider($('#fsSlider'),{min:LIM.fs[0],max:LIM.fs[1],step:1,log:true,vertical:true,value:S.fs,label:'Frecuencia del tono de inicio',
-  text:function(v){return v+' hercios, '+noteName(v)},
+sFs=makeSlider($('#fsSlider'),{min:LIM.fs[0],max:LIM.fs[1],step:1,log:true,vertical:true,value:S.fs,label:function(){return t('sliderFs')},
+  text:function(v){return t('hzText',{v:v,n:noteName(v)})},
   onInput:function(v){S.fs=v;render();}, onChange:function(){save();preview('s');}});
-sFe=makeSlider($('#feSlider'),{min:LIM.fe[0],max:LIM.fe[1],step:1,log:true,vertical:true,value:S.fe,label:'Frecuencia del tono de fin',
-  text:function(v){return v+' hercios, '+noteName(v)},
+sFe=makeSlider($('#feSlider'),{min:LIM.fe[0],max:LIM.fe[1],step:1,log:true,vertical:true,value:S.fe,label:function(){return t('sliderFe')},
+  text:function(v){return t('hzText',{v:v,n:noteName(v)})},
   onInput:function(v){S.fe=v;render();}, onChange:function(){save();preview('e');}});
-sVol=makeSlider($('#volSlider'),{min:0,max:100,step:1,value:S.vol,label:'Volumen',
-  text:function(v){return v+' por ciento'},
+sVol=makeSlider($('#volSlider'),{min:0,max:100,step:1,value:S.vol,label:function(){return t('volume')},
+  text:function(v){return t('percentText',{v:v})},
   onInput:function(v){S.vol=v;applyVolume();render();}, onChange:function(){save();preview('s');}});
 $('#fsSlider').style.setProperty('--c','var(--start)');
 $('#feSlider').style.setProperty('--c','var(--end)');
@@ -1018,6 +1118,35 @@ holdRepeat($('#bpmUp'),function(){setBpm(S.bpm+1)});
 holdRepeat($('#fracDown'),function(){setFrac(S.frac-1)});
 holdRepeat($('#fracUp'),function(){setFrac(S.frac+1)});
 
+/* ---------- Idioma ---------- */
+function clearLabels(){   /* etiqueta del botón Borrar todos / Deshacer según su estado actual */
+  var b=$('#clearIv'), u=!!undoIv;
+  b.textContent=t(u?'undo':'clearAll'); b.setAttribute('aria-label',t(u?'undoAria':'clearAllAria'));
+}
+function applyLang(persist){
+  LANG=(S.lang==='es'||S.lang==='en')? S.lang : deviceLang();
+  setFormats();
+  document.documentElement.setAttribute('lang',LANG);
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'),function(el){ el.textContent=t(el.getAttribute('data-i18n')); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-aria]'),function(el){ el.setAttribute('aria-label',t(el.getAttribute('data-i18n-aria'))); });
+  var md=$('#metaDesc'); if(md) md.setAttribute('content',t('metaDesc'));
+  $('#langAuto').setAttribute('aria-pressed',S.lang==='es'||S.lang==='en'?'false':'true');
+  $('#langEs').setAttribute('aria-pressed',S.lang==='es'?'true':'false');
+  $('#langEn').setAttribute('aria-pressed',S.lang==='en'?'true':'false');
+  $('#playLabel').textContent=running?t('stop'):t('play');
+  renderVersion();
+  [sBpm,sFrac,sFs,sFe,sVol].forEach(function(sl){ sl.relabel(); });
+  var u=undoIv;   /* reconstruir las filas cancela el «Deshacer»; si estaba activo, se conserva */
+  buildRows();
+  if(u){ undoIv=u; showUndo(); }
+  clearLabels();
+  render();
+  if(persist) save();
+}
+$('#langAuto').addEventListener('click',function(){ S.lang='auto'; applyLang(true); });
+$('#langEs').addEventListener('click',function(){ S.lang='es'; applyLang(true); });
+$('#langEn').addEventListener('click',function(){ S.lang='en'; applyLang(true); });
+applyLang(false);
 setPro(S.pro,false);
 
 /* ---------- PWA: funcionamiento sin conexión ---------- */

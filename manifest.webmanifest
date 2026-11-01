@@ -1,7 +1,7 @@
 {
   "name": "Ritmo de Remada",
   "short_name": "Ritmo",
-  "description": "Metrónomo de dos tonos para marcar el inicio y el fin de la palada en una trainera.",
+  "description": "Metrónomo de dos tonos para marcar el inicio y el fin de la palada en una trainera. · Two-tone metronome for the start and end of the stroke in a trainera rowing boat.",
   "lang": "es",
   "start_url": "./",
   "scope": "./",
