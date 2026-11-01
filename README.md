@@ -1,55 +1,87 @@
-# Ritmo de Remada
+# Ritmo de Remada / Rowing Stroke Rhythm
 
-Metrónomo de dos tonos para marcar el ritmo de una tripulación de trainera: **tono agudo = inicio de la palada, tono grave = fin**. Funciona sin conexión, como PWA y como app Android (APK).
+Metrónomo de dos tonos para marcar el ritmo de una tripulación de trainera: tono agudo = inicio de la palada, tono grave = fin. / Two-tone metronome for a rowing crew: high tone = stroke start, low tone = stroke end.
 
-- **PWA:** <https://lsantome.github.io/Ritmo-Remada/> (se publica con cada push a `main`; disponible cuando se active GitHub Pages en los ajustes del repositorio)
-- **APK:** pestaña [Releases](https://github.com/lsantome/Ritmo-Remada/releases) del repositorio
+A PWA that works offline and an Android app packaged with Capacitor. / Una PWA que funciona sin conexión y una app Android empaquetada con Capacitor.
 
-## Qué hace
+- PWA / PWA: https://lsantome.github.io/Ritmo-Remada/
+- APK / APK: Releases tab in the repository / pestaña [Releases](https://github.com/lsantome/Ritmo-Remada/releases)
 
-- **Cadencia (BPM):** de 10 a 80 paladas por minuto.
-- **Fin de remada (%):** posición del tono grave dentro del ciclo. A 30 BPM y 50 %, hay un tono de inicio cada 2 s y el de fin llega 1 s después, justo en medio de dos inicios. Al 25 % llega 0,5 s después del inicio.
-- **Ajustes:** frecuencia de los tonos de inicio y de fin (deslizadores verticales con nota musical), volumen general y tema claro/oscuro (claro por defecto).
-- **Idioma:** español e inglés. Usa el del dispositivo (español si el dispositivo lo prefiere; en cualquier otro caso, inglés) y se puede cambiar en Ajustes → Idioma (Auto · Español · English).
-- **Modo Pro:** una lista de intervalos con duración (5 s a 60 min) y cadencia propias, hasta 30. Antes del final de cada intervalo suenan 4 tonos agudos muy seguidos, a 10 s, a 5 s y al terminar (los avisos de 10 s y 5 s solo se dan si el intervalo dura más de esos segundos). Al acabar el último intervalo la sesión se detiene sola. El % de fin de remada es común a toda la sesión.
-- **En el APK:** la pantalla no se apaga mientras la app está abierta y se mantiene en vertical.
+## Overview / Resumen
 
-## Instalación
+Ritmo de Remada is a lightweight rowing cadence trainer designed for trainera crews. It helps maintain a consistent rhythm between athletes by signaling the start and end of each stroke with distinct tones. / Ritmo de Remada es un entrenador ligero de cadencia para tripulaciones de trainera. Ayuda a mantener un ritmo constante entre los remeros al señalar el inicio y el fin de cada palada con tonos distintos.
 
-**PWA (Android):** abre la URL en Chrome → *Instalar aplicación*. **iPhone:** Safari → Compartir → *Añadir a pantalla de inicio*. Tras la primera carga funciona sin conexión.
+## What it does / Qué hace
 
-**APK:** descarga `ritmo-remada-X.Y.Z.apk` de la última Release e instálalo (Android pedirá permitir la instalación desde el navegador o el gestor de archivos). Las versiones nuevas se instalan encima de la anterior porque se firman siempre con la misma clave.
+- Cadence (BPM): from 10 to 80 strokes per minute / Cadencia (BPM): de 10 a 80 paladas por minuto.
+- Stroke end (%): position of the low tone within the cycle / Fin de remada (%): posición del tono grave dentro del ciclo.
+- Settings: start/end tone frequencies, general volume, light/dark theme, and language / Ajustes: frecuencias de los tonos de inicio y fin, volumen general, tema claro/oscuro e idioma.
+- Pro mode: a list of intervals with customized duration and cadence, up to 30 entries / Modo Pro: una lista de intervalos con duración y cadencia personalizadas, hasta 30 entradas.
+- In the APK: the screen stays on while open and the app remains in portrait orientation / En la APK: la pantalla no se apaga mientras la app está abierta y se mantiene en vertical.
+- English and Spanish UI, following the device language by default / Interfaz en inglés y español, siguiendo el idioma del dispositivo por defecto.
 
-## Datos y privacidad
+## Installation / Instalación
 
-La app no envía nada a ningún servidor: los ajustes (BPM, %, frecuencias, volumen, tema, idioma, lista del modo Pro) se guardan solo en el dispositivo. **La PWA y el APK son instalaciones distintas y no comparten esos datos.**
+### PWA / PWA
 
-## Limitaciones conocidas
+Open the app URL in Chrome and choose Install app. On iPhone, use Safari > Share > Add to Home Screen. After the first load it works offline. / Abre la URL en Chrome y elige Instalar aplicación. En iPhone, usa Safari > Compartir > Añadir a pantalla de inicio. Tras la primera carga funciona sin conexión.
 
-- Con la pantalla apagada o la app en segundo plano, el sistema puede cortar el audio. No hay servicio en primer plano.
-- Probado en Chromium y compilado para Android; **no verificado en un dispositivo real** en esta estructura del repositorio.
+### APK / APK
 
-## Desarrollo
+Download the `ritmo-remada-X.Y.Z.apk` file from the latest Release and install it. Android may ask you to allow installation from the browser or file manager. New versions replace older installs while preserving local settings. / Descarga `ritmo-remada-X.Y.Z.apk` de la última Release e instálalo. Android puede pedirte permitir la instalación desde el navegador o el gestor de archivos. Las versiones nuevas reemplazan las instalaciones anteriores y conservan los ajustes locales.
 
-Requisitos: Node ≥ 22. Para Android además JDK 21 y el SDK de Android (plataforma 36 y build-tools 36.0.0) con `ANDROID_HOME` definido. Detalles en [`docs/ANDROID.md`](docs/ANDROID.md).
+## Data and privacy / Datos y privacidad
+
+The app does not send any data to a server. Settings such as BPM, stroke end percentage, frequencies, volume, theme, language, and Pro-mode intervals are stored only on the device. The PWA and APK are separate installations. / La app no envía nada a ningún servidor. Los ajustes como BPM, porcentaje de fin de remada, frecuencias, volumen, tema, idioma y los intervalos del modo Pro se guardan solo en el dispositivo. La PWA y la APK son instalaciones distintas.
+
+## Known limitations / Limitaciones conocidas
+
+- With the screen off or the app in the background, the system may interrupt playback. There is no foreground service. / Con la pantalla apagada o la app en segundo plano, el sistema puede cortar el audio. No hay servicio en primer plano.
+- Tested on Chromium and built for Android; not verified on a real device in this repository layout. / Probado en Chromium y compilado para Android; no verificado en un dispositivo real en esta estructura del repositorio.
+
+## Development / Desarrollo
+
+Requirements / Requisitos: Node ≥ 22. For Android, JDK 21 and Android SDK with `ANDROID_HOME` defined. See [`docs/ANDROID.md`](docs/ANDROID.md). / Requisitos: Node ≥ 22. Para Android, JDK 21 y Android SDK con `ANDROID_HOME` definido. Consulta [`docs/ANDROID.md`](docs/ANDROID.md).
 
 ```bash
-npm ci                    # dependencias (solo Capacitor, para Android)
-npm test                  # pruebas: planificadores de audio, PWA, versión, Android y seguridad
-npm run build:pwa         # dist/site: lo que se publica en Pages, con versión y caché selladas
-npm run build:android-web # dist/app: la web que entra en el APK
-npm run android:debug     # APK de depuración → android/app/build/outputs/apk/debug/
-npm run android:release   # APK y AAB de release (firmados si hay clave configurada)
+npm ci
+npm test
+npm run build:pwa
+npm run build:android-web
+npm run android:debug
 ```
 
-Estructura: `index.html`, `manifest.webmanifest`, `sw.js`, `icons/` y `fonts/` en la raíz (es la app, sin dependencias ni paso de compilación para usarla) · `scripts/` build y versión · `tests/` pruebas (`tests/e2e/`, de navegador y opcionales) · `android/` proyecto Capacitor · `.github/workflows/` CI.
+The app is a simple static site built with HTML, CSS, and JavaScript in `index.html`; the project also includes the Android packaging with Capacitor. / La app es un sitio estático simple construido con HTML, CSS y JavaScript en `index.html`; el proyecto también incluye el empaquetado para Android con Capacitor.
 
-Para probar en local sin construir: `python3 -m http.server 8000` en la raíz y abrir `http://localhost:8000/`. La versión mostrada en Ajustes será «desarrollo».
+To test locally without building: run `python3 -m http.server 8000` from the project root and open `http://localhost:8000/`. The version shown in Settings will read as “development”. / Para probar en local sin construir: ejecuta `python3 -m http.server 8000` en la raíz del proyecto y abre `http://localhost:8000/`. La versión mostrada en Ajustes aparecerá como “desarrollo”.
 
-## Versiones
+## Versions / Versiones
 
-La versión vive en `package.json`. Cada construcción la sella junto al hash del commit y la fecha, y se ve al final de Ajustes (`v1.4.0 · build abc1234 · 2026-10-23`). Historial en [`CHANGELOG.md`](CHANGELOG.md). Para publicar una versión, ver [`docs/ANDROID.md`](docs/ANDROID.md#publicar-una-versión).
+The version lives in `package.json`. Each build seals the version along with the commit hash and date, and it is shown at the end of Settings (`v1.4.0 · build abc1234 · 2026-10-23`). / La versión vive en `package.json`. Cada compilación sella la versión junto con el hash del commit y la fecha, y se muestra al final de Ajustes (`v1.4.0 · build abc1234 · 2026-10-23`).
 
-## Licencia
+See [`CHANGELOG.md`](CHANGELOG.md) for the release history. / Consulta [`CHANGELOG.md`](CHANGELOG.md) para ver el historial de versiones.
+
+## License / Licencia
 
 MIT
+
+## Project structure / Estructura del proyecto
+
+- `index.html` — main app / app principal
+- `manifest.webmanifest` — PWA manifest / manifiesto PWA
+- `sw.js` — service worker / service worker
+- `icons/` and `fonts/` — assets / recursos
+- `scripts/` — build and version tooling / herramientas de compilación y versión
+- `tests/` — automated tests / pruebas automatizadas
+- `android/` — Capacitor Android project / proyecto Android de Capacitor
+- `docs/ANDROID.md` — Android instructions / instrucciones de Android
+- `.github/workflows/` — CI/CD for Pages and Android / CI/CD para Pages y Android
+
+## Notes / Notas
+
+This README is intentionally bilingual so it can be read by both Spanish-speaking and English-speaking users. / Este README está intencionalmente en dos idiomas para que pueda leerse tanto por usuarios hispanohablantes como por usuarios de habla inglesa.
+
+For the most up-to-date build and release instructions, also check the project’s configuration files and Android docs. / Para ver las instrucciones más actualizadas de compilación y publicación, consulta también los archivos de configuración del proyecto y la documentación de Android.
+
+"""
+}],
