@@ -17,7 +17,11 @@ function build(outName, withSw) {
   const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
   fs.writeFileSync(path.join(out, 'index.html'), stampIndex(read('index.html'), v));
   fs.copyFileSync(path.join(ROOT, 'manifest.webmanifest'), path.join(out, 'manifest.webmanifest'));
-  if (withSw) fs.writeFileSync(path.join(out, 'sw.js'), stampSw(read('sw.js'), v));
+  if (withSw) {
+    fs.writeFileSync(path.join(out, 'sw.js'), stampSw(read('sw.js'), v));
+    /* Política de privacidad: solo en el sitio web (Google Play pide una URL pública). No va en el APK. */
+    fs.copyFileSync(path.join(ROOT, 'privacidad.html'), path.join(out, 'privacidad.html'));
+  }
   for (const d of DIRS) fs.cpSync(path.join(ROOT, d), path.join(out, d), { recursive: true });
 
   /* Todo lo que precachea el service worker debe existir y no estar vacío. */
@@ -29,7 +33,7 @@ function build(outName, withSw) {
       const f = s.slice(1, -1);
       if (f !== './') required.push(f);
     }
-    required.push('sw.js');
+    required.push('sw.js', 'privacidad.html');
   }
   for (const f of required) {
     const p = path.join(out, f);
