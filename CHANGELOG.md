@@ -2,6 +2,18 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [1.6.0] - 2026-11-01
+
+### Añadido
+- **Interfaz en español e inglés.** Al abrir la app por primera vez usa el idioma del dispositivo: español si es el primero de su lista de idiomas preferidos entre español e inglés, e inglés en cualquier otro caso (por ejemplo, un dispositivo en francés o en alemán). Un dispositivo en catalán con el español como segunda lengua usa español.
+- **Selector en Ajustes** (Auto · Español · English). «Auto» sigue al dispositivo; la elección manual se guarda y se conserva al recargar. El cambio es inmediato, también con una sesión en marcha.
+- Se traduce todo: textos visibles, etiquetas para lectores de pantalla, la descripción de la página y el formato de los números (`2,00 s` / `2.00 s`). Las notas musicales pasan de solfeo (Fa6) a letras (F6) en inglés. En inglés, la palada se llama *stroke*; remada, *drive*; y recobro, *recovery*.
+- Pruebas: `tests/i18n.test.js` (diccionarios con las mismas claves y marcadores, detección del idioma, claves usadas y huérfanas) y `tests/e2e/idioma.py` (navegador: detección, selector, persistencia, textos sin mezclar, modo Pro en marcha y desbordes de pantalla a 320, 360 y 412 px).
+
+### Cambiado
+- El idioma elegido se guarda dentro del ajuste existente (`ritmo-remada-v1`, campo `lang`); no se renombra ninguna clave. Los datos guardados con versiones anteriores se conservan y quedan en «Auto».
+- `manifest.webmanifest`: la descripción incluye también el texto en inglés. El nombre de la app («Ritmo de Remada») y el título de la pantalla principal no se traducen.
+
 ## [1.5.0] - 2026-10-31
 
 ### Añadido

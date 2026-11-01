@@ -10,6 +10,7 @@ Metrónomo de dos tonos para marcar el ritmo de una tripulación de trainera: **
 - **Cadencia (BPM):** de 10 a 80 paladas por minuto.
 - **Fin de remada (%):** posición del tono grave dentro del ciclo. A 30 BPM y 50 %, hay un tono de inicio cada 2 s y el de fin llega 1 s después, justo en medio de dos inicios. Al 25 % llega 0,5 s después del inicio.
 - **Ajustes:** frecuencia de los tonos de inicio y de fin (deslizadores verticales con nota musical), volumen general y tema claro/oscuro (claro por defecto).
+- **Idioma:** español e inglés. Usa el del dispositivo (español si el dispositivo lo prefiere; en cualquier otro caso, inglés) y se puede cambiar en Ajustes → Idioma (Auto · Español · English).
 - **Modo Pro:** una lista de intervalos con duración (5 s a 60 min) y cadencia propias, hasta 30. Antes del final de cada intervalo suenan 4 tonos agudos muy seguidos, a 10 s, a 5 s y al terminar (los avisos de 10 s y 5 s solo se dan si el intervalo dura más de esos segundos). Al acabar el último intervalo la sesión se detiene sola. El % de fin de remada es común a toda la sesión.
 - **En el APK:** la pantalla no se apaga mientras la app está abierta y se mantiene en vertical.
 
@@ -21,7 +22,7 @@ Metrónomo de dos tonos para marcar el ritmo de una tripulación de trainera: **
 
 ## Datos y privacidad
 
-La app no envía nada a ningún servidor: los ajustes (BPM, %, frecuencias, volumen, tema, lista del modo Pro) se guardan solo en el dispositivo. **La PWA y el APK son instalaciones distintas y no comparten esos datos.**
+La app no envía nada a ningún servidor: los ajustes (BPM, %, frecuencias, volumen, tema, idioma, lista del modo Pro) se guardan solo en el dispositivo. **La PWA y el APK son instalaciones distintas y no comparten esos datos.**
 
 ## Limitaciones conocidas
 

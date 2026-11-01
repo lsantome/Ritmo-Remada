@@ -1,6 +1,6 @@
 {
   "name": "ritmo-remada",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Metrónomo de dos tonos para marcar el inicio y el fin de la palada en una trainera.",
   "private": true,
   "license": "MIT",
