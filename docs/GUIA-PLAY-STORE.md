@@ -9,7 +9,7 @@ Guía en orden. Lo marcado con ⚠️ es lo que más suele salir mal. Nada de es
 | AAB firmado | Se genera al subir una etiqueta `vX.Y.Z` | Release de GitHub (`ritmo-remada-X.Y.Z.aab`) |
 | Textos de la ficha (español e inglés) | Listos; `npm test` vigila los límites de Play | `store/ficha-play-store.md` |
 | Icono 512×512, gráfico 1024×500, capturas | Listos (generados desde la interfaz real en el navegador) | `store/` |
-| Política de privacidad | Escrita; **falta tu correo** y publicarla | `privacidad.html` → `https://lsantome.github.io/Ritmo-Remada/privacidad.html` |
+| Política de privacidad | Escrita, con correo de contacto; se publica al fusionar a `main` | `privacidad.html` → `https://lsantome.github.io/Ritmo-Remada/privacidad.html` |
 | Cuenta de desarrollador de Play | **Falta** | — |
 | Capturas del APK en tu móvil | Opcional; sustituyen a las del navegador | — |
 
@@ -19,8 +19,8 @@ Para regenerar los gráficos tras cambiar la interfaz: `npm run build:pwa && pyt
 
 Play la exige y debe ser una **URL pública** que cargue sin iniciar sesión.
 
-1. Abre `privacidad.html` y sustituye `[CORREO DE CONTACTO]` y `[CONTACT EMAIL]` por tu correo. **Play muestra públicamente el correo de contacto de la ficha**: usa una dirección dedicada, no la personal.
-2. Súbelo a `main` por PR. El workflow *Pages* publica el fichero junto con la web.
+1. El correo de contacto de `privacidad.html` es `rinchasoft@gmail.com`; si prefieres otro, cámbialo en los dos idiomas. **Play muestra públicamente el correo de contacto de la ficha**: usa el mismo.
+2. Se sube a `main` por PR. El workflow *Pages* publica el fichero junto con la web.
 3. Abre `https://lsantome.github.io/Ritmo-Remada/privacidad.html` en el navegador y comprueba que carga, **antes** de pegarla en Play Console.
 4. Si algún día la app añade analíticas, anuncios o cualquier conexión, hay que reescribirla **y** cambiar la declaración de seguridad de los datos. `tests/store.test.js` falla si `index.html` empieza a usar red.
 

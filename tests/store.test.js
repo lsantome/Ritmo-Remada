@@ -85,6 +85,8 @@ test('privacidad.html: bilingüe, sin recursos externos y coherente con la ficha
   const externos = [...p.matchAll(/(?:src|href)="(https?:[^"]+)"/g)].map(m => m[1]).filter(u => !u.startsWith('https://lsantome.github.io/Ritmo-Remada/'));
   assert.deepStrictEqual(externos, [], 'la política no debe cargar ni enlazar recursos externos');
   assert(!/<script|<img|<link/i.test(p), 'la política es una página estática sin scripts ni imágenes');
+  assert(!/\[(CORREO DE CONTACTO|CONTACT EMAIL)\]/.test(p), 'quedan marcadores de correo sin rellenar en privacidad.html');
+  assert((p.match(/mailto:[^"\s@]+@[^"\s@]+\.[a-z]+/g) || []).length >= 2, 'falta el correo de contacto en español y en inglés');
   assert(read('store/ficha-play-store.md').includes('https://lsantome.github.io/Ritmo-Remada/privacidad.html'), 'la ficha debe citar la URL de la política');
 });
 
