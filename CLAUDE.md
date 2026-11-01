@@ -30,7 +30,8 @@ Los planificadores de audio viven en `index.html` entre `/*SCHED-START*/` y `/*S
 6. Las apps de `lsantome.github.io` comparten origen: el service worker solo debe borrar cachés con prefijo `ritmo-remada-`.
 7. No hacer push directo a `main` (despliega la PWA): rama + PR.
 8. No tocar la lógica de audio sin ejecutar `npm test`; cubre los tiempos de inicio, fin y avisos.
-9. No dar por verificado lo que no se ha ejecutado, y decir qué queda sin comprobar (por ejemplo, el comportamiento en un móvil real).
+9. **Textos de la interfaz en dos idiomas.** Todo texto visible o accesible (incluidos `aria-label` y textos de deslizadores) va en `I18N` (`es` y `en`, mismas claves y marcadores `{x}`) y se usa con `t('clave')` o `data-i18n`/`data-i18n-aria`; nunca texto literal en el código. `npm test` falla si falta una clave o una traducción. El nombre de la app y el hash `#ajustes` no se traducen.
+10. No dar por verificado lo que no se ha ejecutado, y decir qué queda sin comprobar (por ejemplo, el comportamiento en un móvil real).
 
 ## Subir de versión
 
