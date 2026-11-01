@@ -11,6 +11,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - `tests/store.test.js`: límites de caracteres de la ficha, tamaños de las imágenes, coherencia con los textos de la app y que la política no cargue recursos externos ni la app use red sin actualizar la declaración de datos.
 
 ### Cambiado
+- **Descripciones sin referencias a un tipo de barco:** la app se presenta como metrónomo para deportes de remo, válido en interior y en exterior, en el README, la ficha de Play, la descripción del manifiesto y la de la página (`metaDesc`, en español e inglés). No cambia ningún comportamiento ni el identificador del paquete.
 - **README reescrito** para quien usa la app: explica que es para deportes de remo, que ayuda a interiorizar ritmos y sincronizar tripulaciones, y que sirve en interior y en exterior. Primero en inglés y después en español. Se quita la parte de desarrollo (comandos, estructura y notas), que sigue en `CLAUDE.md` y `docs/ANDROID.md`, y la mención de que no estaba verificado en un dispositivo real.
 
 ## [1.6.0] - 2026-11-01
