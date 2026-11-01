@@ -16,7 +16,7 @@ npm run android:debug     # APK de depuración
 
 ## Estructura
 
-`index.html`, `manifest.webmanifest`, `sw.js`, `icons/`, `fonts/` en la raíz · `scripts/` (versión y builds) · `tests/` (`*.test.js` en `npm test`; `tests/e2e/` opcional con Playwright) · `android/` (proyecto Capacitor) · `docs/ANDROID.md` · `.github/workflows/pages.yml` y `android.yml`.
+`index.html`, `manifest.webmanifest`, `sw.js`, `icons/`, `fonts/` en la raíz · `scripts/` (versión y builds) · `tests/` (`*.test.js` en `npm test`; `tests/e2e/` opcional con Playwright) · `android/` (proyecto Capacitor) · `docs/ANDROID.md` y `docs/GUIA-PLAY-STORE.md` · `privacidad.html` (se publica con la web; es la URL de la política de Google Play) · `store/` (ficha, gráficos y capturas de Play; `generar-material.py` los regenera) · `.github/workflows/pages.yml` y `android.yml`.
 
 Los planificadores de audio viven en `index.html` entre `/*SCHED-START*/` y `/*SCHED-END*/`; las pruebas los extraen de ahí, no los copies a otro sitio.
 
@@ -31,7 +31,8 @@ Los planificadores de audio viven en `index.html` entre `/*SCHED-START*/` y `/*S
 7. No hacer push directo a `main` (despliega la PWA): rama + PR.
 8. No tocar la lógica de audio sin ejecutar `npm test`; cubre los tiempos de inicio, fin y avisos.
 9. **Textos de la interfaz en dos idiomas.** Todo texto visible o accesible (incluidos `aria-label` y textos de deslizadores) va en `I18N` (`es` y `en`, mismas claves y marcadores `{x}`) y se usa con `t('clave')` o `data-i18n`/`data-i18n-aria`; nunca texto literal en el código. `npm test` falla si falta una clave o una traducción. El nombre de la app y el hash `#ajustes` no se traducen.
-10. No dar por verificado lo que no se ha ejecutado, y decir qué queda sin comprobar (por ejemplo, el comportamiento en un móvil real).
+10. Si la app empieza a usar red, analíticas o anuncios, actualizar `privacidad.html` y la declaración de seguridad de los datos de Play (`tests/store.test.js` falla si `index.html` usa red). Si cambia la interfaz o la ficha, regenerar `store/` y revisar que lo que dice sigue siendo cierto.
+11. No dar por verificado lo que no se ha ejecutado, y decir qué queda sin comprobar (por ejemplo, el comportamiento en un móvil real).
 
 ## Subir de versión
 

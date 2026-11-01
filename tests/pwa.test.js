@@ -65,6 +65,7 @@ test('sellado: la versión de package.json es semver y el hash tiene 7 caractere
 test('build:pwa: genera dist/site con service worker y versión sellada', () => {
   const { out, version } = build('site', true);
   assert(fs.existsSync(path.join(out, 'sw.js')));
+  assert(fs.existsSync(path.join(out, 'privacidad.html')), 'la política de privacidad debe publicarse con el sitio (Google Play pide una URL)');
   assert(fs.readFileSync(path.join(out, 'index.html'), 'utf8').includes(`const APP_VERSION = '${version.version}';`));
   assert(fs.readFileSync(path.join(out, 'sw.js'), 'utf8').includes(`const VERSION = '${pkg.name}-${version.hash}';`));
 });
@@ -72,5 +73,6 @@ test('build:pwa: genera dist/site con service worker y versión sellada', () => 
 test('build:android-web: genera dist/app sin service worker', () => {
   const { out } = build('app', false);
   assert(!fs.existsSync(path.join(out, 'sw.js')));
+  assert(!fs.existsSync(path.join(out, 'privacidad.html')), 'la política no va dentro del APK');
   assert(fs.existsSync(path.join(out, 'index.html')));
 });
