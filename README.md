@@ -1,89 +1,79 @@
-# Ritmo de Remada / Rowing Stroke Rhythm
+# Ritmo de Remada
 
-Metrónomo de dos tonos para marcar el ritmo de una tripulación de trainera: tono agudo = inicio de la palada, tono grave = fin. / Two-tone metronome for a rowing crew: high tone = stroke start, low tone = stroke end.
+**English** · [Español](#español)
 
-A PWA that works offline and an Android app packaged with Capacitor. / Una PWA que funciona sin conexión y una app Android empaquetada con Capacitor.
+## English
 
-- PWA / PWA: https://lsantome.github.io/Ritmo-Remada/
-- APK / APK: Releases tab in the repository / pestaña [Releases](https://github.com/lsantome/Ritmo-Remada/releases)
+**A two-tone metronome for rowing sports.** A high tone marks the start of the stroke; a low tone marks the end of the drive. Hearing the same pulse together helps rowers internalize a rhythm and keeps a crew in sync, whether it is trainera, any other crew boat or a single rower.
 
-## Overview / Resumen
+Use it **outdoors**, on the water or on the shore, and **indoors**: on an ergometer, in a rowing tank or in the gym.
 
-Ritmo de Remada is a lightweight rowing cadence trainer designed for trainera crews. It helps maintain a consistent rhythm between athletes by signaling the start and end of each stroke with distinct tones. / Ritmo de Remada es un entrenador ligero de cadencia para tripulaciones de trainera. Ayuda a mantener un ritmo constante entre los remeros al señalar el inicio y el fin de cada palada con tonos distintos.
+### What it does
 
-## What it does / Qué hace
+- **Stroke rate:** 10 to 80 strokes per minute (BPM).
+- **End of the drive (%):** where the low tone falls inside the stroke cycle. At 30 BPM and 50 %, a start tone sounds every 2 s and the end tone comes 1 s later, exactly halfway between two starts. At 25 % it comes 0.5 s after the start.
+- **Your sound:** pitch of each tone (vertical sliders that show the musical note), master volume and light or dark theme.
+- **Pro mode:** a list of up to 30 intervals, each with its own duration (5 s to 60 min) and stroke rate, for structured sessions. Four quick high tones warn you at 10 s, at 5 s and at the end of each interval (the 10 s and 5 s warnings only sound if the interval is longer than that). The session stops by itself after the last interval. A **Clear all** button empties the list in one tap, with **Undo**.
+- **English and Spanish:** follows your device language and can be changed in Settings.
+- **In the Android app:** the screen stays on while the app is open, in portrait.
+- **Works offline** after the first load.
 
-- Cadence (BPM): from 10 to 80 strokes per minute / Cadencia (BPM): de 10 a 80 paladas por minuto.
-- Stroke end (%): position of the low tone within the cycle / Fin de remada (%): posición del tono grave dentro del ciclo.
-- Settings: start/end tone frequencies, general volume, light/dark theme, and language / Ajustes: frecuencias de los tonos de inicio y fin, volumen general, tema claro/oscuro e idioma.
-- Pro mode: a list of intervals with customized duration and cadence, up to 30 entries / Modo Pro: una lista de intervalos con duración y cadencia personalizadas, hasta 30 entradas.
-- In the APK: the screen stays on while open and the app remains in portrait orientation / En la APK: la pantalla no se apaga mientras la app está abierta y se mantiene en vertical.
-- English and Spanish UI, following the device language by default / Interfaz en inglés y español, siguiendo el idioma del dispositivo por defecto.
+### Get the app
 
-## Installation / Instalación
+- **Web app (PWA):** https://lsantome.github.io/Ritmo-Remada/
+  - Android: open it in Chrome and choose *Install app*.
+  - iPhone: in Safari, *Share* → *Add to Home Screen*.
+- **Android app (APK):** download `ritmo-remada-X.Y.Z.apk` from the [latest Release](https://github.com/lsantome/Ritmo-Remada/releases) and open it. Android may ask you to allow installation from your browser or file manager. New versions install over the old one and keep your settings.
 
-### PWA / PWA
+The web app and the Android app are separate installations and do not share settings.
 
-Open the app URL in Chrome and choose Install app. On iPhone, use Safari > Share > Add to Home Screen. After the first load it works offline. / Abre la URL en Chrome y elige Instalar aplicación. En iPhone, usa Safari > Compartir > Añadir a pantalla de inicio. Tras la primera carga funciona sin conexión.
+### Privacy
 
-### APK / APK
+No accounts, no ads, no tracking: the app sends nothing to any server. Your settings (BPM, tone pitches, volume, theme, language and Pro intervals) are stored on your device. Full policy: [privacidad.html](https://lsantome.github.io/Ritmo-Remada/privacidad.html).
 
-Download the `ritmo-remada-X.Y.Z.apk` file from the latest Release and install it. Android may ask you to allow installation from the browser or file manager. New versions replace older installs while preserving local settings. / Descarga `ritmo-remada-X.Y.Z.apk` de la última Release e instálalo. Android puede pedirte permitir la instalación desde el navegador o el gestor de archivos. Las versiones nuevas reemplazan las instalaciones anteriores y conservan los ajustes locales.
+### Known limitations
 
-## Data and privacy / Datos y privacidad
+With the screen off or the app in the background, the system may cut the audio. Keep the app open and on screen during your session.
 
-The app does not send any data to a server. Settings such as BPM, stroke end percentage, frequencies, volume, theme, language, and Pro-mode intervals are stored only on the device. The PWA and APK are separate installations. / La app no envía nada a ningún servidor. Los ajustes como BPM, porcentaje de fin de remada, frecuencias, volumen, tema, idioma y los intervalos del modo Pro se guardan solo en el dispositivo. La PWA y la APK son instalaciones distintas.
+### Version and license
 
-Full policy / Política completa: [privacidad.html](privacidad.html) (https://lsantome.github.io/Ritmo-Remada/privacidad.html). Google Play: [docs/GUIA-PLAY-STORE.md](docs/GUIA-PLAY-STORE.md).
+The version is shown at the end of Settings. History: [CHANGELOG.md](CHANGELOG.md). License: MIT.
 
-## Known limitations / Limitaciones conocidas
+---
 
-- With the screen off or the app in the background, the system may interrupt playback. There is no foreground service. / Con la pantalla apagada o la app en segundo plano, el sistema puede cortar el audio. No hay servicio en primer plano.
-- Tested on Chromium and built for Android; not verified on a real device in this repository layout. / Probado en Chromium y compilado para Android; no verificado en un dispositivo real en esta estructura del repositorio.
+## Español
 
-## Development / Desarrollo
+**Un metrónomo de dos tonos para deportes de remo.** El tono agudo marca el inicio de la palada y el grave, el fin de la remada. Oír todos el mismo pulso ayuda a interiorizar un ritmo y a sincronizar a la tripulación, ya sea en trainera, en otra embarcación de equipo o remando en solitario.
 
-Requirements / Requisitos: Node ≥ 22. For Android, JDK 21 and Android SDK with `ANDROID_HOME` defined. See [`docs/ANDROID.md`](docs/ANDROID.md). / Requisitos: Node ≥ 22. Para Android, JDK 21 y Android SDK con `ANDROID_HOME` definido. Consulta [`docs/ANDROID.md`](docs/ANDROID.md).
+Úsalo **en exterior**, en el agua o desde la orilla, y **en interior**: en el ergómetro, en el tanque de remo o en el gimnasio.
 
-```bash
-npm ci
-npm test
-npm run build:pwa
-npm run build:android-web
-npm run android:debug
-```
+### Qué hace
 
-The app is a simple static site built with HTML, CSS, and JavaScript in `index.html`; the project also includes the Android packaging with Capacitor. / La app es un sitio estático simple construido con HTML, CSS y JavaScript en `index.html`; el proyecto también incluye el empaquetado para Android con Capacitor.
+- **Cadencia:** de 10 a 80 paladas por minuto (BPM).
+- **Fin de remada (%):** en qué punto del ciclo suena el tono grave. A 30 BPM y 50 %, hay un tono de inicio cada 2 s y el de fin llega 1 s después, justo en medio de dos inicios. Al 25 % llega 0,5 s después del inicio.
+- **Tu sonido:** frecuencia de cada tono (deslizadores verticales que muestran la nota musical), volumen general y tema claro u oscuro.
+- **Modo Pro:** una lista de hasta 30 intervalos, cada uno con su duración (de 5 s a 60 min) y su cadencia, para sesiones estructuradas. Cuatro tonos agudos seguidos avisan a 10 s, a 5 s y al terminar cada intervalo (los avisos de 10 s y 5 s solo suenan si el intervalo dura más que eso). La sesión se detiene sola al acabar el último intervalo. Un botón **Borrar todos** vacía la lista de una vez, con **Deshacer**.
+- **Español e inglés:** usa el idioma del dispositivo y puedes cambiarlo en Ajustes.
+- **En la app de Android:** la pantalla no se apaga mientras la app está abierta y se mantiene en vertical.
+- **Funciona sin conexión** tras la primera carga.
 
-To test locally without building: run `python3 -m http.server 8000` from the project root and open `http://localhost:8000/`. The version shown in Settings will read as “development”. / Para probar en local sin construir: ejecuta `python3 -m http.server 8000` en la raíz del proyecto y abre `http://localhost:8000/`. La versión mostrada en Ajustes aparecerá como “desarrollo”.
+### Cómo conseguir la app
 
-## Versions / Versiones
+- **App web (PWA):** https://lsantome.github.io/Ritmo-Remada/
+  - Android: ábrela en Chrome y elige *Instalar aplicación*.
+  - iPhone: en Safari, *Compartir* → *Añadir a pantalla de inicio*.
+- **App de Android (APK):** descarga `ritmo-remada-X.Y.Z.apk` de la [última Release](https://github.com/lsantome/Ritmo-Remada/releases) y ábrelo. Android puede pedirte permitir la instalación desde el navegador o el gestor de archivos. Las versiones nuevas se instalan sobre la anterior y conservan tus ajustes.
 
-The version lives in `package.json`. Each build seals the version along with the commit hash and date, and it is shown at the end of Settings (`v1.4.0 · build abc1234 · 2026-10-23`). / La versión vive en `package.json`. Cada compilación sella la versión junto con el hash del commit y la fecha, y se muestra al final de Ajustes (`v1.4.0 · build abc1234 · 2026-10-23`).
+La app web y la de Android son instalaciones distintas y no comparten ajustes.
 
-See [`CHANGELOG.md`](CHANGELOG.md) for the release history. / Consulta [`CHANGELOG.md`](CHANGELOG.md) para ver el historial de versiones.
+### Privacidad
 
-## License / Licencia
+Sin cuentas, sin anuncios y sin rastreo: la app no envía nada a ningún servidor. Tus ajustes (BPM, frecuencias, volumen, tema, idioma e intervalos Pro) se guardan en tu dispositivo. Política completa: [privacidad.html](https://lsantome.github.io/Ritmo-Remada/privacidad.html).
 
-MIT
+### Limitaciones conocidas
 
-## Project structure / Estructura del proyecto
+Con la pantalla apagada o la app en segundo plano, el sistema puede cortar el audio. Mantén la app abierta y en pantalla durante la sesión.
 
-- `index.html` — main app / app principal
-- `manifest.webmanifest` — PWA manifest / manifiesto PWA
-- `sw.js` — service worker / service worker
-- `icons/` and `fonts/` — assets / recursos
-- `scripts/` — build and version tooling / herramientas de compilación y versión
-- `tests/` — automated tests / pruebas automatizadas
-- `android/` — Capacitor Android project / proyecto Android de Capacitor
-- `docs/ANDROID.md` — Android instructions / instrucciones de Android
-- `.github/workflows/` — CI/CD for Pages and Android / CI/CD para Pages y Android
+### Versión y licencia
 
-## Notes / Notas
-
-This README is intentionally bilingual so it can be read by both Spanish-speaking and English-speaking users. / Este README está intencionalmente en dos idiomas para que pueda leerse tanto por usuarios hispanohablantes como por usuarios de habla inglesa.
-
-For the most up-to-date build and release instructions, also check the project’s configuration files and Android docs. / Para ver las instrucciones más actualizadas de compilación y publicación, consulta también los archivos de configuración del proyecto y la documentación de Android.
-
-"""
-}],
+La versión se muestra al final de Ajustes. Historial: [CHANGELOG.md](CHANGELOG.md). Licencia: MIT.
