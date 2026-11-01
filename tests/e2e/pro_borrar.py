@@ -16,7 +16,7 @@ def chk(nombre, ok, detalle=''):
 async def main():
     async with async_playwright() as p:
         b = await p.chromium.launch(args=['--autoplay-policy=no-user-gesture-required'])
-        ctx = await b.new_context(viewport={'width': 360, 'height': 780}, has_touch=True)
+        ctx = await b.new_context(locale='es-ES', viewport={'width': 360, 'height': 780}, has_touch=True)   # los textos que comprueba están en español
         pg = await ctx.new_page()
         errs = []
         pg.on('pageerror', lambda e: errs.append(str(e)))
