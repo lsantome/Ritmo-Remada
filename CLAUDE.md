@@ -1,6 +1,6 @@
 # CLAUDE.md — Ritmo de Remada
 
-Metrónomo de dos tonos para trainera (agudo = inicio de palada, grave = fin). PWA en GitHub Pages + APK de Android con Capacitor. Responde y comenta en **español**.
+Metrónomo de dos tonos para deportes de remo (agudo = inicio de palada, grave = fin). PWA en GitHub Pages + APK de Android con Capacitor. Responde y comenta en **español**.
 
 ## Stack y comandos
 
