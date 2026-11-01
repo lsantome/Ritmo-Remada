@@ -34,6 +34,8 @@ Download the `ritmo-remada-X.Y.Z.apk` file from the latest Release and install i
 
 The app does not send any data to a server. Settings such as BPM, stroke end percentage, frequencies, volume, theme, language, and Pro-mode intervals are stored only on the device. The PWA and APK are separate installations. / La app no envía nada a ningún servidor. Los ajustes como BPM, porcentaje de fin de remada, frecuencias, volumen, tema, idioma y los intervalos del modo Pro se guardan solo en el dispositivo. La PWA y la APK son instalaciones distintas.
 
+Full policy / Política completa: [privacidad.html](privacidad.html) (https://lsantome.github.io/Ritmo-Remada/privacidad.html). Google Play: [docs/GUIA-PLAY-STORE.md](docs/GUIA-PLAY-STORE.md).
+
 ## Known limitations / Limitaciones conocidas
 
 - With the screen off or the app in the background, the system may interrupt playback. There is no foreground service. / Con la pantalla apagada o la app en segundo plano, el sistema puede cortar el audio. No hay servicio en primer plano.

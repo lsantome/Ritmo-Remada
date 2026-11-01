@@ -2,6 +2,14 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [Sin publicar]
+
+### Añadido
+- **Política de privacidad** (`privacidad.html`, en español e inglés), publicada con la web en `https://lsantome.github.io/Ritmo-Remada/privacidad.html`, que es la URL que pide Google Play. No va dentro del APK. Falta sustituir el marcador del correo de contacto antes de pegar la URL en Play Console.
+- **Material de la ficha de Google Play** en `store/`: textos en español e inglés (`ficha-play-store.md`), icono 512×512, gráfico de funciones 1024×500 y capturas de móvil, más `generar-material.py` para regenerarlos. Las capturas son del navegador, no del APK.
+- `docs/GUIA-PLAY-STORE.md`: pasos para publicar, la decisión sobre la firma de Play, declaraciones de contenido de la app y pruebas pendientes en un móvil real.
+- `tests/store.test.js`: límites de caracteres de la ficha, tamaños de las imágenes, coherencia con los textos de la app y que la política no cargue recursos externos ni la app use red sin actualizar la declaración de datos.
+
 ## [1.6.0] - 2026-11-01
 
 ### Añadido
