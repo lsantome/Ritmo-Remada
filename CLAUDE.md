@@ -25,7 +25,7 @@ Los planificadores de audio viven en `index.html` entre `/*SCHED-START*/` y `/*S
 1. **Nunca subir claves.** Ni `*.keystore`, `*.jks`, `*.p12`, `keystore.properties`, ni contraseñas en ningún fichero. Las pruebas y el CI fallan si aparece alguno. La firma va por variables de entorno o secretos de GitHub (ver `docs/ANDROID.md`).
 2. **No mover el HTML de la raíz.**
 3. **No renombrar el repositorio** (cambia la URL de Pages y rompe las PWA ya instaladas).
-4. **No cambiar `appId` (`es.trainera.ritmo`) ni el `id` del manifest (`ritmo-remada`)**: son la identidad de la app instalada.
+4. **No cambiar `appId` (`es.ritmo.remada`) ni el `id` del manifest (`ritmo-remada`)**: son la identidad de la app instalada y la de Google Play. (Hasta 1.6.0 el `appId` fue `es.trainera.ritmo`; cambió en 1.6.1 antes de publicar en Play. Los tests exigen que coincidan con él `build.gradle`, `strings.xml` y la carpeta y el `package` de las clases Java.)
 5. **No renombrar la clave de `localStorage` `ritmo-remada-v1`**: se perderían los ajustes de quien ya usa la app. Cualquier clave nueva debe empezar por `ritmo-remada`.
 6. Las apps de `lsantome.github.io` comparten origen: el service worker solo debe borrar cachés con prefijo `ritmo-remada-`.
 7. No hacer push directo a `main` (despliega la PWA): rama + PR.

@@ -2,7 +2,7 @@
 
 La app Android es la misma web de la raíz del repositorio empaquetada con [Capacitor](https://capacitorjs.com/) 8.5.3. `npm run build:android-web` genera `dist/app` (sin service worker) y `cap sync` la copia al proyecto `android/`.
 
-- **Identidad:** `es.trainera.ritmo`. No se cambia: es lo que Android usa para reconocer una actualización.
+- **Identidad:** `es.ritmo.remada` (desde 1.6.1; hasta 1.6.0 fue `es.trainera.ritmo`). No se cambia más: es lo que Android usa para reconocer una actualización. El cambio de 1.6.1 hace que Android la trate como otra app: no se instala encima de 1.6.0 y los ajustes locales no pasan de una a otra.
 - **Versión:** `versionName` = `version` de `package.json`; `versionCode` = `major*10000 + minor*100 + patch` (1.4.0 → 10400). No puede bajar nunca.
 - **Mínimo Android 7.0 (API 24).** `compileSdk` y `targetSdk` 36.
 

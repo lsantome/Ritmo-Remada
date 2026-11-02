@@ -23,7 +23,7 @@ It works both **indoors** (on an ergometer, in a rowing tank or in the gym) and 
 - **Web app (PWA):** https://lsantome.github.io/Ritmo-Remada/
   - Android: open it in Chrome and choose *Install app*.
   - iPhone: in Safari, *Share* → *Add to Home Screen*.
-- **Android app (APK):** download `ritmo-remada-X.Y.Z.apk` from the [latest Release](https://github.com/lsantome/Ritmo-Remada/releases) and open it. Android may ask you to allow installation from your browser or file manager. New versions install over the old one and keep your settings.
+- **Android app (APK):** download `ritmo-remada-X.Y.Z.apk` from the [latest Release](https://github.com/lsantome/Ritmo-Remada/releases) and open it. Android may ask you to allow installation from your browser or file manager. From 1.6.1 on, new versions install over the old one and keep your settings. Version 1.6.1 changed the app's Android identity, so it installs next to 1.6.0 or earlier as a separate app: uninstall the old one (its settings are not carried over).
 
 The web app and the Android app are separate installations and do not share settings.
 
@@ -62,7 +62,7 @@ Sirve tanto **en interior** (en el ergómetro, en el tanque de remo o en el gimn
 - **App web (PWA):** https://lsantome.github.io/Ritmo-Remada/
   - Android: ábrela en Chrome y elige *Instalar aplicación*.
   - iPhone: en Safari, *Compartir* → *Añadir a pantalla de inicio*.
-- **App de Android (APK):** descarga `ritmo-remada-X.Y.Z.apk` de la [última Release](https://github.com/lsantome/Ritmo-Remada/releases) y ábrelo. Android puede pedirte permitir la instalación desde el navegador o el gestor de archivos. Las versiones nuevas se instalan sobre la anterior y conservan tus ajustes.
+- **App de Android (APK):** descarga `ritmo-remada-X.Y.Z.apk` de la [última Release](https://github.com/lsantome/Ritmo-Remada/releases) y ábrelo. Android puede pedirte permitir la instalación desde el navegador o el gestor de archivos. A partir de la 1.6.1, las versiones nuevas se instalan sobre la anterior y conservan tus ajustes. La 1.6.1 cambió la identidad de la app en Android, así que se instala junto a la 1.6.0 o anteriores como una app distinta: desinstala la antigua (sus ajustes no se trasladan).
 
 La app web y la de Android son instalaciones distintas y no comparten ajustes.
 

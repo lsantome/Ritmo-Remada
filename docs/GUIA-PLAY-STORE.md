@@ -35,18 +35,20 @@ Play la exige y debe ser una **URL pública** que cargue sin iniciar sesión.
 
 ## 3. Firma: la decisión que no se puede deshacer
 
-La app ya está repartida como APK firmado con tu clave (alias `ritmo`; ver [ANDROID.md](ANDROID.md)). Con **Play App Signing**, Google firma lo que reciben los usuarios de Play y tu clave pasa a ser la **clave de subida**.
+La app se ha repartido como APK firmado con tu clave (alias `ritmo`; ver [ANDROID.md](ANDROID.md)). Con **Play App Signing**, Google firma lo que reciben los usuarios de Play y tu clave pasa a ser la **clave de subida**.
 
-⚠️ **Consecuencia:** si dejas que Google genere su propia clave de firma, quien tenga el APK instalado a mano **no podrá actualizar desde Play** (la firma es distinta) y tendrá que desinstalar y reinstalar, perdiendo los ajustes de ese dispositivo. Creo que la consola permite aportar tu clave actual en el primer envío para evitarlo, pero **no lo he verificado** y la elección no se puede cambiar después. Decide antes de subir el primer AAB:
+La identidad en Play es `es.ritmo.remada`, **distinta** de la de los APK anteriores a 1.6.1 (`es.trainera.ritmo`). Por eso quien tenga uno de esos APK no puede actualizar a la app de Play ni a un APK nuevo: Android las trata como apps distintas y hay que instalar la nueva y desinstalar la vieja (los ajustes no se migran). La firma de Play no añade ese problema a esos usuarios.
 
-- Si los usuarios del APK son pocos y avisables: deja que Google genere la clave (lo habitual) y pídeles que reinstalen desde Play.
-- Si no quieres que nadie reinstale: aporta tu clave en el primer envío (sigue las instrucciones de «Usar una clave de firma existente» de la consola).
+⚠️ **Sí afecta a los APK nuevos (1.6.1 o posterior) instalados a mano:** si dejas que Google genere su propia clave de firma, esos APK (firmados con tu clave) no podrán actualizarse desde Play, y al revés. Creo que la consola permite aportar tu clave actual en el primer envío para evitarlo, pero **no lo he verificado** y la elección no se puede cambiar después. Decide antes de subir el primer AAB:
+
+- Si el APK de GitHub dejará de repartirse o se reparte a pocas personas: deja que Google genere la clave (lo habitual) y pídeles que usen Play.
+- Si quieres seguir repartiendo el APK de GitHub **y** Play con actualización cruzada: aporta tu clave en el primer envío (sigue las instrucciones de «Usar una clave de firma existente» de la consola).
 
 Guarda siempre el keystore, el alias y las contraseñas **fuera del PC**. Nunca los subas al repositorio.
 
 ## 4. Crear la app en Play Console
 
-**Todas las apps ▸ Crear app**: nombre «Ritmo de Remada», idioma **es-ES**, **App** (no juego), **Gratuita**, y acepta las declaraciones. El `applicationId` es `es.trainera.ritmo` y **no se puede cambiar** una vez publicado.
+**Todas las apps ▸ Crear app**: nombre «Ritmo de Remada», idioma **es-ES**, **App** (no juego), **Gratuita**, y acepta las declaraciones. El `applicationId` es `es.ritmo.remada` (coincide con `capacitor.config.json`; la primera versión que lo usa es la 1.6.1, así que **no subas el AAB de la 1.6.0**, que lleva `es.trainera.ritmo`) y **no se puede cambiar** una vez publicado.
 
 ## 5. Ficha de la tienda
 
