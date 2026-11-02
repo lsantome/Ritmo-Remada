@@ -29,10 +29,10 @@ if (System.getenv('ANDROID_KEYSTORE_PATH')) {
 }
 
 android {
-    namespace = "es.trainera.ritmo"
+    namespace = "es.ritmo.remada"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "es.trainera.ritmo"
+        applicationId "es.ritmo.remada"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode verMajor * 10000 + verMinor * 100 + verPatch

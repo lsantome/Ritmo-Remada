@@ -10,13 +10,24 @@ const cap = JSON.parse(read('capacitor.config.json'));
 const gradle = read('android/app/build.gradle');
 
 test('capacitor.config.json: appId y carpeta web', () => {
-  assert.strictEqual(cap.appId, 'es.trainera.ritmo');   // no se cambia: es la identidad de la app ya instalada
+  assert.strictEqual(cap.appId, 'es.ritmo.remada');   // no se cambia: es la identidad de la app en Android y en Google Play
   assert.strictEqual(cap.webDir, 'dist/app');
 });
 
 test('build.gradle: applicationId y namespace coinciden con appId', () => {
   assert(gradle.includes(`applicationId "${cap.appId}"`));
   assert(gradle.includes(`namespace = "${cap.appId}"`));
+});
+
+test('el paquete Java, su carpeta y las fuentes coinciden con appId', () => {
+  const dir = 'android/app/src/main/java/' + cap.appId.split('.').join('/');
+  for (const f of ['MainActivity.java', 'RitmoNativePlugin.java']) {
+    assert(exists(dir + '/' + f), 'falta ' + dir + '/' + f);
+    assert(read(dir + '/' + f).includes(`package ${cap.appId};`), f + ': la declaración package no coincide con appId');
+  }
+  const strings = read('android/app/src/main/res/values/strings.xml');
+  assert(strings.includes(`<string name="package_name">${cap.appId}</string>`), 'strings.xml: package_name');
+  assert(strings.includes(`<string name="custom_url_scheme">${cap.appId}</string>`), 'strings.xml: custom_url_scheme');
 });
 
 test('build.gradle: la versión sale de package.json', () => {
@@ -64,7 +75,7 @@ test('ningún keystore, binario ni fichero de contraseñas está versionado', ()
 
 test('manifest de Android: vertical y MainActivity con pantalla siempre encendida', () => {
   assert(/android:screenOrientation="portrait"/.test(read('android/app/src/main/AndroidManifest.xml')));
-  const main = read('android/app/src/main/java/es/trainera/ritmo/MainActivity.java');
+  const main = read('android/app/src/main/java/' + cap.appId.split('.').join('/') + '/MainActivity.java');
   assert(main.includes('FLAG_KEEP_SCREEN_ON'));
   assert(main.includes('registerPlugin(RitmoNativePlugin.class)'));
 });

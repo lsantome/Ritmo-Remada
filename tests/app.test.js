@@ -30,7 +30,7 @@ test('las claves de almacenamiento llevan el prefijo propio (el origen lsantome.
 
 test('el puente nativo de la página coincide con el plugin de Android', () => {
   const html = read('index.html');
-  const java = read('android/app/src/main/java/es/trainera/ritmo/RitmoNativePlugin.java');
+  const java = read('android/app/src/main/java/' + JSON.parse(read('capacitor.config.json')).appId.split('.').join('/') + '/RitmoNativePlugin.java');
   assert(/Capacitor\.Plugins\.RitmoNative/.test(html));
   assert(/@CapacitorPlugin\(name\s*=\s*"RitmoNative"\)/.test(java));
   assert(/public void setTheme\(/.test(java));
