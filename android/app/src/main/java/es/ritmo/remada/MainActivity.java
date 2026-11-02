@@ -1,4 +1,4 @@
-package es.trainera.ritmo;
+package es.ritmo.remada;
 
 import android.os.Bundle;
 import android.view.WindowManager;

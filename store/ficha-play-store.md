@@ -55,7 +55,7 @@ Ritmo de Remada es software libre (licencia MIT). Código y novedades: https://g
 
 ### Novedades
 ```text
-Novedades 1.6.0: la app ya está en español e inglés (usa el idioma del dispositivo; se cambia en Ajustes). Nuevo botón «Borrar todos» en el modo Pro, con «Deshacer».
+Primera versión en Google Play. Interfaz en español e inglés (usa el idioma del dispositivo; se cambia en Ajustes) y botón «Borrar todos» en el modo Pro, con «Deshacer».
 ```
 
 ## English (en-US) — traducción
@@ -109,7 +109,7 @@ Ritmo de Remada is free software (MIT license). Source code and release notes: h
 
 ### What's new
 ```text
-What's new in 1.6.0: the app is now available in English and Spanish (it follows your device language; change it in Settings). New "Clear all" button in Pro mode, with "Undo".
+First release on Google Play. English and Spanish interface (it follows your device language; change it in Settings) and a "Clear all" button in Pro mode, with "Undo".
 ```
 
 ## Datos de la app (Play Console ▸ Contenido de la app)

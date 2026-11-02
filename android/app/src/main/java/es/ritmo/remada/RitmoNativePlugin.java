@@ -1,4 +1,4 @@
-package es.trainera.ritmo;
+package es.ritmo.remada;
 
 import android.graphics.Color;
 import android.os.Build;

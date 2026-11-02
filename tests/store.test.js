@@ -81,7 +81,8 @@ test('imágenes de la ficha: icono 512×512, gráfico 1024×500 y capturas de m�
 test('privacidad.html: bilingüe, sin recursos externos y coherente con la ficha', () => {
   const p = read('privacidad.html');
   assert(/<section id="es" lang="es">/.test(p) && /<section id="en" lang="en">/.test(p), 'faltan las dos secciones de idioma');
-  assert(p.includes('es.trainera.ritmo'), 'debe nombrar el paquete');
+  assert(p.includes(JSON.parse(read('capacitor.config.json')).appId), 'debe nombrar el paquete actual');
+  assert(!p.includes('es.trainera'), 'queda el identificador antiguo en la política');
   const externos = [...p.matchAll(/(?:src|href)="(https?:[^"]+)"/g)].map(m => m[1]).filter(u => !u.startsWith('https://lsantome.github.io/Ritmo-Remada/'));
   assert.deepStrictEqual(externos, [], 'la política no debe cargar ni enlazar recursos externos');
   assert(!/<script|<img|<link/i.test(p), 'la política es una página estática sin scripts ni imágenes');
