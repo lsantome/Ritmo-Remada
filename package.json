@@ -1,7 +1,7 @@
 {
   "name": "ritmo-remada",
-  "version": "1.6.0",
-  "description": "Metrónomo de dos tonos para marcar el inicio y el fin de la palada en una trainera.",
+  "version": "1.6.1",
+  "description": "Metrónomo de dos tonos para marcar el inicio y el fin de la palada en deportes de remo.",
   "private": true,
   "license": "MIT",
   "engines": {

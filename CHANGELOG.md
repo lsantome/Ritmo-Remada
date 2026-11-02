@@ -4,6 +4,8 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Sin publicar]
 
+## [1.6.1] - 2026-11-02
+
 ### Añadido
 - **Política de privacidad** (`privacidad.html`, en español e inglés), publicada con la web en `https://lsantome.github.io/Ritmo-Remada/privacidad.html`, que es la URL que pide Google Play. No va dentro del APK. El correo de contacto es `rinchasoft@gmail.com`.
 - **Material de la ficha de Google Play** en `store/`: textos en español e inglés (`ficha-play-store.md`), icono 512×512, gráfico de funciones 1024×500 y capturas de móvil, más `generar-material.py` para regenerarlos. Las capturas son del navegador, no del APK.
@@ -11,7 +13,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - `tests/store.test.js`: límites de caracteres de la ficha, tamaños de las imágenes, coherencia con los textos de la app y que la política no cargue recursos externos ni la app use red sin actualizar la declaración de datos.
 
 ### Cambiado
-- **Descripciones sin referencias a un tipo de barco:** la app se presenta como metrónomo para deportes de remo, válido en interior y en exterior, en el README, la ficha de Play, la descripción del manifiesto y la de la página (`metaDesc`, en español e inglés). No cambia ningún comportamiento ni el identificador del paquete.
+- **Nueva identidad de Android: `es.ritmo.remada`** (antes `es.trainera.ritmo`), la que se registró en Google Play. Cambian `appId`, `applicationId`, `namespace`, `strings.xml` y el paquete de las clases Java (`MainActivity`, `RitmoNativePlugin`). **Android la trata como otra app:** no se instala encima de la 1.6.0 ni de anteriores y los ajustes guardados en el móvil no se trasladan; hay que instalar la nueva y desinstalar la antigua. La PWA no cambia (mismo `id` de manifiesto y misma clave `ritmo-remada-v1`).
+- Las pruebas exigen ahora que `appId`, `build.gradle`, `strings.xml` y la carpeta y el `package` de las clases Java coincidan.
+- `privacidad.html` nombra el nuevo paquete.
+- **Descripciones sin referencias a un tipo de barco:** la app se presenta como metrónomo para deportes de remo, válido en interior y en exterior, en el README, la ficha de Play, la descripción del manifiesto y la de la página (`metaDesc`, en español e inglés). No cambia ningún comportamiento.
 - **README reescrito** para quien usa la app: explica que es para deportes de remo, que ayuda a interiorizar ritmos y sincronizar tripulaciones, y que sirve en interior y en exterior. Primero en inglés y después en español. Se quita la parte de desarrollo (comandos, estructura y notas), que sigue en `CLAUDE.md` y `docs/ANDROID.md`, y la mención de que no estaba verificado en un dispositivo real.
 
 ## [1.6.0] - 2026-11-01
