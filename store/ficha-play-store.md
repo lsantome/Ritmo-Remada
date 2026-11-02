@@ -13,12 +13,12 @@ Ritmo de Remada
 
 ### Descripción breve
 ```text
-Metrónomo de dos tonos para marcar la palada en trainera. Sin conexión.
+Metrónomo de remo para interiorizar ritmos. Interior, exterior y sin conexión.
 ```
 
 ### Descripción completa
 ```text
-Ritmo de Remada es un metrónomo de dos tonos pensado para marcar el ritmo de una tripulación de trainera.
+Ritmo de Remada es un metrónomo de dos tonos para deportes de remo. Ayuda a interiorizar ritmos y a sincronizar a la tripulación, tanto en interior como en exterior.
 
 • Tono agudo = inicio de la palada.
 • Tono grave = fin de la palada.
@@ -40,7 +40,8 @@ MODO PRO: ENTRENAMIENTOS POR INTERVALOS
 • La sesión se detiene sola al acabar el último intervalo.
 • Botón «Borrar todos» para vaciar la lista de una vez, con «Deshacer».
 
-PENSADA PARA EL AGUA
+INTERIOR Y EXTERIOR
+• Sirve en ergómetro, tanque y gimnasio, y también en el agua.
 • Funciona sin conexión.
 • Sin anuncios, sin cuentas y sin recopilar datos: tus ajustes se guardan en tu dispositivo.
 • La pantalla permanece encendida mientras la app está abierta y se mantiene en vertical.
@@ -66,12 +67,12 @@ Ritmo de Remada
 
 ### Short description
 ```text
-Two-tone rowing metronome for trainera crews. Set stroke rate and intervals.
+Two-tone rowing metronome to learn rhythm and sync crews, indoors and outdoors.
 ```
 
 ### Full description
 ```text
-Ritmo de Remada is a two-tone metronome built to set the pace of a trainera rowing crew (the traditional Spanish and Basque coastal rowing boat).
+Ritmo de Remada is a two-tone metronome for rowing sports. It helps you internalize rhythms and keeps a crew in sync, both indoors and outdoors.
 
 • High tone = start of the stroke.
 • Low tone = end of the stroke.
@@ -93,7 +94,8 @@ PRO MODE: INTERVAL TRAINING
 • The session stops by itself when the last interval ends.
 • "Clear all" button to empty the list in one tap, with "Undo".
 
-BUILT FOR THE WATER
+INDOORS AND OUTDOORS
+• Works on an ergometer, in a rowing tank, in the gym and on the water.
 • Works offline.
 • No ads, no accounts and no data collection: your settings are stored on your device.
 • The screen stays on while the app is open, in portrait.

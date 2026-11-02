@@ -4,9 +4,9 @@
 
 ## English
 
-**A two-tone metronome for rowing sports.** A high tone marks the start of the stroke; a low tone marks the end of the drive. Hearing the same pulse together helps rowers internalize a rhythm and keeps a crew in sync, whether it is trainera, any other crew boat or a single rower.
+**A two-tone metronome for rowing sports.** A high tone marks the start of the stroke; a low tone marks the end of the drive. Hearing the same pulse together helps rowers internalize a rhythm and keeps a crew in sync.
 
-Use it **outdoors**, on the water or on the shore, and **indoors**: on an ergometer, in a rowing tank or in the gym.
+It works both **indoors** (on an ergometer, in a rowing tank or in the gym) and **outdoors** (on the water or on the shore).
 
 ### What it does
 
@@ -43,9 +43,9 @@ The version is shown at the end of Settings. History: [CHANGELOG.md](CHANGELOG.m
 
 ## Español
 
-**Un metrónomo de dos tonos para deportes de remo.** El tono agudo marca el inicio de la palada y el grave, el fin de la remada. Oír todos el mismo pulso ayuda a interiorizar un ritmo y a sincronizar a la tripulación, ya sea en trainera, en otra embarcación de equipo o remando en solitario.
+**Un metrónomo de dos tonos para deportes de remo.** El tono agudo marca el inicio de la palada y el grave, el fin de la remada. Oír todos el mismo pulso ayuda a interiorizar un ritmo y a sincronizar a la tripulación.
 
-Úsalo **en exterior**, en el agua o desde la orilla, y **en interior**: en el ergómetro, en el tanque de remo o en el gimnasio.
+Sirve tanto **en interior** (en el ergómetro, en el tanque de remo o en el gimnasio) como **en exterior** (en el agua o desde la orilla).
 
 ### Qué hace
 

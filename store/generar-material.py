@@ -47,11 +47,11 @@ html,body{{margin:0;width:1024px;height:500px;background:#0c2430;color:#f4fafb;o
 .fila{{position:absolute;left:70px;top:0;height:500px;display:flex;align-items:center;gap:56px}}
 img{{width:230px;height:230px;border-radius:48px}}
 h1{{font:700 92px/0.95 C;margin:0;letter-spacing:.5px}}
-p{{font:500 34px/1.3 B;margin:18px 0 0;color:#b9d3dc;max-width:560px}}
+p{{font:500 34px/1.3 B;margin:18px 0 0;color:#b9d3dc;max-width:640px}}
 .barra{{position:absolute;left:0;right:0;bottom:0;height:14px;display:flex}}
 .barra i{{flex:1;background:#ff8a2b}} .barra i+i{{background:#52c2ee}}
 </style><div class=fila><img src="data:image/png;base64,{icono_b64}"><div>
-<h1>Ritmo de Remada</h1><p>Rowing metronome · Metrónomo de remo para trainera</p></div></div>
+<h1>Ritmo de Remada</h1><p>Rowing metronome · Metrónomo de remo</p></div></div>
 <div class=barra><i></i><i></i></div>"""
     pg = await browser.new_page(viewport={'width': 1024, 'height': 500})
     await pg.set_content(html)
