@@ -2,7 +2,7 @@
 
 Texto listo para pegar en Play Console (*Crecimiento ▸ Presencia en la tienda ▸ Ficha de tienda principal*). Los límites los vigila `npm test` (`tests/store.test.js`): nombre 30, descripción breve 80, completa 4.000, novedades 500 caracteres. Cada campo va en su bloque de código; la prueba lee esos bloques.
 
-El nombre de la app no se traduce (es la misma en los dos idiomas).
+El nombre de la app **sí** cambia según el idioma (desde 1.6.2): «Ritmo de Remada» en español y «Rowing Metronome» en inglés. Es el mismo nombre que muestra la interfaz y la etiqueta de Android (`values-es/` y `values/`); `tests/store.test.js` lo vigila.
 
 ## Español (es-ES) — idioma predeterminado
 
@@ -55,24 +55,24 @@ Ritmo de Remada es software libre (licencia MIT). Código y novedades: https://g
 
 ### Novedades
 ```text
-Primera versión en Google Play. Interfaz en español e inglés (usa el idioma del dispositivo; se cambia en Ajustes) y botón «Borrar todos» en el modo Pro, con «Deshacer».
+Novedad: la app se llama «Rowing Metronome» en los dispositivos que no están en español y «Ritmo de Remada» en español, también dentro de la app. La ficha de la tienda ya está también en inglés.
 ```
 
 ## English (en-US) — traducción
 
 ### Name
 ```text
-Ritmo de Remada
+Rowing Metronome
 ```
 
 ### Short description
 ```text
-Two-tone rowing metronome to learn rhythm and sync crews, indoors and outdoors.
+Two-tone stroke metronome to learn rhythm and sync crews, indoors and outdoors.
 ```
 
 ### Full description
 ```text
-Ritmo de Remada is a two-tone metronome for rowing sports. It helps you internalize rhythms and keeps a crew in sync, both indoors and outdoors.
+Rowing Metronome marks the stroke with two tones, for rowing sports. It helps you internalize rhythms and keeps a crew in sync, both indoors and outdoors.
 
 • High tone = start of the stroke.
 • Low tone = end of the stroke.
@@ -104,12 +104,12 @@ INDOORS AND OUTDOORS
 IMPORTANT
 Keep the app open and on screen during your session. If the system turns the screen off or sends the app to the background, it may cut the audio.
 
-Ritmo de Remada is free software (MIT license). Source code and release notes: https://github.com/lsantome/Ritmo-Remada
+Rowing Metronome (Ritmo de Remada in Spanish) is free software (MIT license). Source code and release notes: https://github.com/lsantome/Ritmo-Remada
 ```
 
 ### What's new
 ```text
-First release on Google Play. English and Spanish interface (it follows your device language; change it in Settings) and a "Clear all" button in Pro mode, with "Undo".
+New: the app is called "Rowing Metronome" on devices not set to Spanish and "Ritmo de Remada" in Spanish, also inside the app. The store listing is now also available in English.
 ```
 
 ## Datos de la app (Play Console ▸ Contenido de la app)

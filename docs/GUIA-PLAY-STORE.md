@@ -48,13 +48,13 @@ Guarda siempre el keystore, el alias y las contraseñas **fuera del PC**. Nunca 
 
 ## 4. Crear la app en Play Console
 
-**Todas las apps ▸ Crear app**: nombre «Ritmo de Remada», idioma **es-ES**, **App** (no juego), **Gratuita**, y acepta las declaraciones. El `applicationId` es `es.ritmo.remada` (coincide con `capacitor.config.json`; la primera versión que lo usa es la 1.6.1, así que **no subas el AAB de la 1.6.0**, que lleva `es.trainera.ritmo`) y **no se puede cambiar** una vez publicado.
+**Todas las apps ▸ Crear app**: nombre «Ritmo de Remada» (en la traducción al inglés: «Rowing Metronome»), idioma **es-ES**, **App** (no juego), **Gratuita**, y acepta las declaraciones. El `applicationId` es `es.ritmo.remada` (coincide con `capacitor.config.json`; la primera versión que lo usa es la 1.6.1, así que **no subas el AAB de la 1.6.0**, que lleva `es.trainera.ritmo`) y **no se puede cambiar** una vez publicado.
 
 ## 5. Ficha de la tienda
 
 1. **Ficha principal (es-ES):** pega los textos de `store/ficha-play-store.md` (sección Español).
 2. Sube `store/icono-512.png`, `store/grafico-funciones-1024x500.png` y las capturas `store/captura-es-*.png`.
-3. **Añadir traducción ▸ English (en-US):** pega la sección English y sube `store/captura-en-*.png`.
+3. **Añadir traducción ▸ English (en-US):** pega la sección English (el título es «Rowing Metronome») y sube `store/grafico-funciones-en-1024x500.png` y `store/captura-en-*.png`. Si la consola no ofrece un gráfico propio por idioma, deja el predeterminado.
 4. Categoría **Deportes**, correo de contacto, sitio web (opcional) y URL de la política (paso 1).
 
 ⚠️ Las capturas son del navegador con la interfaz real. Si quieres, sustitúyelas por capturas del APK instalado en tu móvil.

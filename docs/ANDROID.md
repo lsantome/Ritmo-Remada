@@ -3,6 +3,7 @@
 La app Android es la misma web de la raíz del repositorio empaquetada con [Capacitor](https://capacitorjs.com/) 8.5.3. `npm run build:android-web` genera `dist/app` (sin service worker) y `cap sync` la copia al proyecto `android/`.
 
 - **Identidad:** `es.ritmo.remada` (desde 1.6.1; hasta 1.6.0 fue `es.trainera.ritmo`). No se cambia más: es lo que Android usa para reconocer una actualización. El cambio de 1.6.1 hace que Android la trate como otra app: no se instala encima de 1.6.0 y los ajustes locales no pasan de una a otra.
+- **Nombre en el móvil (desde 1.6.2):** `values/strings.xml` lleva «Rowing Metronome» (idioma por defecto, igual que la interfaz: español solo si el dispositivo lo prefiere) y `values-es/strings.xml`, «Ritmo de Remada». No cambia el identificador del paquete. Si añades un idioma a la interfaz, añade su carpeta `values-xx`.
 - **Versión:** `versionName` = `version` de `package.json`; `versionCode` = `major*10000 + minor*100 + patch` (1.4.0 → 10400). No puede bajar nunca.
 - **Mínimo Android 7.0 (API 24).** `compileSdk` y `targetSdk` 36.
 

@@ -1,6 +1,6 @@
 {
   "name": "ritmo-remada",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Metrónomo de dos tonos para marcar el inicio y el fin de la palada en deportes de remo.",
   "private": true,
   "license": "MIT",

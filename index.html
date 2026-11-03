@@ -217,7 +217,7 @@ button[disabled]{opacity:.35; pointer-events:none}
   <div class="view" id="viewMain">
     <div class="bar">
       <div class="bar-title">
-        <h1>Ritmo de remada</h1>
+        <h1 data-i18n="appName">Ritmo de Remada</h1>
         <span class="cycle-len" id="cycleLen">2,00 s por palada</span>
       </div>
       <button class="icon-btn" id="openSettings" type="button" aria-label="Abrir ajustes" data-i18n-aria="openSettings">
@@ -474,6 +474,7 @@ var I18N={
   driveEnd:'Fin de remada', driveEndSub:'% del ciclo desde el tono de inicio',
   intervals:'Intervalos', addIv:'Añadir intervalo', clearAll:'Borrar todos', undo:'Deshacer',
   toneStart:'Inicio', toneEnd:'Fin', high:'agudo', low:'grave',
+  appName:'Ritmo de Remada',
   back:'Volver', settings:'Ajustes', proMode:'Modo Pro',
   proDesc:'Duración y cadencia distintas en cada tramo. Avisa con 4 tonos agudos a 10 s, a 5 s y al terminar cada intervalo.',
   testWarn:'Probar aviso', frequency:'Frecuencia', volume:'Volumen', volumeMaster:'Volumen general',
@@ -502,6 +503,7 @@ var I18N={
   driveEnd:'Drive end', driveEndSub:'% of the cycle from the start tone',
   intervals:'Intervals', addIv:'Add interval', clearAll:'Clear all', undo:'Undo',
   toneStart:'Start', toneEnd:'End', high:'high', low:'low',
+  appName:'Rowing Metronome',
   back:'Back', settings:'Settings', proMode:'Pro mode',
   proDesc:'A different duration and stroke rate for each section. Warns with 4 high tones at 10 s, at 5 s and at the end of each interval.',
   testWarn:'Test warning', frequency:'Frequency', volume:'Volume', volumeMaster:'Master volume',
@@ -1129,6 +1131,7 @@ function applyLang(persist){
   document.documentElement.setAttribute('lang',LANG);
   Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'),function(el){ el.textContent=t(el.getAttribute('data-i18n')); });
   Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-aria]'),function(el){ el.setAttribute('aria-label',t(el.getAttribute('data-i18n-aria'))); });
+  document.title=t('appName');
   var md=$('#metaDesc'); if(md) md.setAttribute('content',t('metaDesc'));
   $('#langAuto').setAttribute('aria-pressed',S.lang==='es'||S.lang==='en'?'false':'true');
   $('#langEs').setAttribute('aria-pressed',S.lang==='es'?'true':'false');
