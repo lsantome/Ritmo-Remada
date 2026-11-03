@@ -1,5 +1,5 @@
 """Genera el material gráfico de la ficha de Google Play en esta carpeta (store/):
-  icono-512.png · grafico-funciones-1024x500.png · captura-es-*.png · captura-en-*.png
+  icono-512.png · grafico-funciones-1024x500.png (es) · grafico-funciones-en-1024x500.png · captura-es-*.png · captura-en-*.png
 
 Uso (desde la raíz del repositorio):  npm run build:pwa && python3 store/generar-material.py
 Requiere Python con Pillow y Playwright (Chromium). Sirve dist/site en un puerto local libre.
@@ -36,7 +36,7 @@ def font_b64(nombre):
     return base64.b64encode((RAIZ / 'fonts' / nombre).read_bytes()).decode()
 
 
-async def grafico(browser):
+async def grafico(browser, nombre_fichero, titulo, lema):
     f700 = font_b64('barlow-condensed-latin-700-normal.woff2')
     f500 = font_b64('barlow-latin-500-normal.woff2')
     icono_b64 = base64.b64encode((STORE / 'icono-512.png').read_bytes()).decode()
@@ -51,14 +51,14 @@ p{{font:500 34px/1.3 B;margin:18px 0 0;color:#b9d3dc;max-width:640px}}
 .barra{{position:absolute;left:0;right:0;bottom:0;height:14px;display:flex}}
 .barra i{{flex:1;background:#ff8a2b}} .barra i+i{{background:#52c2ee}}
 </style><div class=fila><img src="data:image/png;base64,{icono_b64}"><div>
-<h1>Ritmo de Remada</h1><p>Rowing metronome · Metrónomo de remo</p></div></div>
+<h1>{titulo}</h1><p>{lema}</p></div></div>
 <div class=barra><i></i><i></i></div>"""
     pg = await browser.new_page(viewport={'width': 1024, 'height': 500})
     await pg.set_content(html)
     await pg.wait_for_timeout(300)
-    await pg.screenshot(path=str(STORE / 'grafico-funciones-1024x500.png'))
+    await pg.screenshot(path=str(STORE / nombre_fichero))
     await pg.close()
-    im = Image.open(STORE / 'grafico-funciones-1024x500.png').convert('RGB'); im.save(STORE / 'grafico-funciones-1024x500.png', optimize=True)
+    im = Image.open(STORE / nombre_fichero).convert('RGB'); im.save(STORE / nombre_fichero, optimize=True)
 
 
 async def capturas(browser, base):
@@ -114,7 +114,8 @@ async def main():
         time.sleep(1)
         async with async_playwright() as p:
             b = await p.chromium.launch()
-            await grafico(b)
+            await grafico(b, 'grafico-funciones-1024x500.png', 'Ritmo de Remada', 'Metrónomo para deportes de remo')
+            await grafico(b, 'grafico-funciones-en-1024x500.png', 'Rowing Metronome', 'Metronome for rowing sports')
             await capturas(b, f'http://127.0.0.1:{puerto}/')
             await b.close()
     finally:

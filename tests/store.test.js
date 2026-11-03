@@ -38,10 +38,14 @@ test('la ficha respeta los límites de Google Play en español e inglés', () =>
   }
 });
 
-test('el nombre de la ficha es el de la app en los dos idiomas', () => {
+test('el nombre de la ficha es el de la app en cada idioma (el de la interfaz y el de la etiqueta de Android)', () => {
   const f = ficha(), cap = JSON.parse(read('capacitor.config.json'));
+  const m = read('index.html').match(/\/\*I18N-START\*\/([\s\S]*?)\/\*I18N-END\*\//);
+  const { I18N } = new Function(m[1] + '; return { I18N: I18N };')();
   assert.strictEqual(f.es.nombre, cap.appName);
-  assert.strictEqual(f.en.nombre, cap.appName);
+  assert.strictEqual(f.es.nombre, I18N.es.appName);
+  assert.strictEqual(f.en.nombre, I18N.en.appName);
+  assert(f.en.completa.includes(f.en.nombre), 'la descripción completa en inglés debe usar el nombre en inglés');
 });
 
 test('la ficha nombra el botón «Borrar todos» / «Clear all» tal como aparece en la app', () => {
@@ -64,9 +68,11 @@ test('imágenes de la ficha: icono 512×512, gráfico 1024×500 y capturas de m�
   const icono = dimensionesPng('store/icono-512.png');
   assert.deepStrictEqual([icono.w, icono.h], [512, 512]);
   assert(fs.statSync(path.join(ROOT, 'store/icono-512.png')).size <= 1024 * 1024, 'el icono supera 1 MB');
-  const grafico = dimensionesPng('store/grafico-funciones-1024x500.png');
-  assert.deepStrictEqual([grafico.w, grafico.h], [1024, 500]);
-  assert.notStrictEqual(grafico.colorType, 6, 'el gráfico no debe tener canal alfa');
+  for (const f of ['store/grafico-funciones-1024x500.png', 'store/grafico-funciones-en-1024x500.png']) {
+    const grafico = dimensionesPng(f);
+    assert.deepStrictEqual([grafico.w, grafico.h], [1024, 500], f);
+    assert.notStrictEqual(grafico.colorType, 6, f + ' no debe tener canal alfa');
+  }
   const capturas = fs.readdirSync(path.join(ROOT, 'store')).filter(n => /^captura-(es|en)-.+\.png$/.test(n));
   assert(capturas.filter(n => n.startsWith('captura-es-')).length >= 2, 'Play pide al menos 2 capturas');
   assert(capturas.filter(n => n.startsWith('captura-en-')).length >= 2, 'la traducción al inglés necesita al menos 2 capturas');
