@@ -4,6 +4,14 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Sin publicar]
 
+## [1.6.2] - 2026-11-03
+
+### Cambiado
+- **Nombre de la app según el idioma:** «Ritmo de Remada» en español y **«Rowing Metronome»** en inglés. Se aplica a la etiqueta de Android (`values-es/` en español y `values/` en cualquier otro idioma, igual que la interfaz), al título de la pantalla principal y de la página (clave `appName` del diccionario) y a la ficha de Google Play en inglés. No cambia el identificador del paquete (`es.ritmo.remada`) ni los ajustes guardados, así que se instala encima de la 1.6.1. La PWA instalada conserva el nombre del manifiesto («Ritmo de Remada»).
+- Ficha de Play en inglés: título «Rowing Metronome», descripción breve y completa reescritas para no repetirlo, y novedades de esta versión. Gráfico de funciones propio en inglés (`grafico-funciones-en-1024x500.png`); las capturas en inglés muestran el nombre nuevo.
+- `privacidad.html` nombra la app con el nombre de cada idioma.
+- Pruebas: el nombre de la ficha, el de la interfaz y la etiqueta de Android deben coincidir en cada idioma.
+
 ## [1.6.1] - 2026-11-02
 
 ### Añadido
