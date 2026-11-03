@@ -30,6 +30,16 @@ test('el paquete Java, su carpeta y las fuentes coinciden con appId', () => {
   assert(strings.includes(`<string name="custom_url_scheme">${cap.appId}</string>`), 'strings.xml: custom_url_scheme');
 });
 
+test('etiqueta de la app por idioma: inglés por defecto y español en values-es, igual que en la interfaz y la ficha', () => {
+  const I18N = new Function(read('index.html').match(/\/\*I18N-START\*\/([\s\S]*?)\/\*I18N-END\*\//)[1] + '; return I18N;')();
+  const lee = f => { const x = read(f); return { app: x.match(/<string name="app_name">([^<]*)<\/string>/)[1], act: x.match(/<string name="title_activity_main">([^<]*)<\/string>/)[1] }; };
+  const def = lee('android/app/src/main/res/values/strings.xml'), es = lee('android/app/src/main/res/values-es/strings.xml');
+  assert.deepStrictEqual([def.app, def.act], [I18N.en.appName, I18N.en.appName], 'values/ debe llevar el nombre en inglés (el idioma por defecto de la app)');
+  assert.deepStrictEqual([es.app, es.act], [I18N.es.appName, I18N.es.appName], 'values-es/ debe llevar el nombre en español');
+  assert.strictEqual(es.app, cap.appName, 'capacitor.config.json (appName) es el nombre en español');
+  assert(!/package_name|custom_url_scheme/.test(read('android/app/src/main/res/values-es/strings.xml')), 'esas cadenas no se traducen');
+});
+
 test('build.gradle: la versión sale de package.json', () => {
   assert(gradle.includes("file('../../package.json')"));
   assert(gradle.includes('versionName pkg.version'));

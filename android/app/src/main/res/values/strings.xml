@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Ritmo de Remada</string>
-    <string name="title_activity_main">Ritmo de Remada</string>
+    <string name="app_name">Rowing Metronome</string>
+    <string name="title_activity_main">Rowing Metronome</string>
     <string name="package_name">es.ritmo.remada</string>
     <string name="custom_url_scheme">es.ritmo.remada</string>
 </resources>
