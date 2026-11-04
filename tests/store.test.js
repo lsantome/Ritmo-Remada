@@ -76,6 +76,7 @@ test('imágenes de la ficha: icono 512×512, gráfico 1024×500 y capturas de m�
   const capturas = fs.readdirSync(path.join(ROOT, 'store')).filter(n => /^captura-(es|en)-.+\.png$/.test(n));
   assert(capturas.filter(n => n.startsWith('captura-es-')).length >= 2, 'Play pide al menos 2 capturas');
   assert(capturas.filter(n => n.startsWith('captura-en-')).length >= 2, 'la traducción al inglés necesita al menos 2 capturas');
+  assert.strictEqual(capturas.filter(n => n.startsWith('captura-en-')).length, capturas.filter(n => n.startsWith('captura-es-')).length, 'el inglés debe tener las mismas capturas que el español');
   for (const n of capturas) {
     const d = dimensionesPng('store/' + n);
     assert(Math.min(d.w, d.h) >= 320 && Math.max(d.w, d.h) <= 3840, n + ': lados fuera de 320–3840 px');

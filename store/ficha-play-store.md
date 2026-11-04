@@ -132,8 +132,9 @@ New: the app is called "Rowing Metronome" on devices not set to Spanish and "Rit
 | Elemento | Archivo | Requisito de Play |
 |---|---|---|
 | Icono | `icono-512.png` | PNG 512×512, cuadrado y sin esquinas redondeadas |
-| Gráfico de funciones | `grafico-funciones-1024x500.png` | PNG/JPG 1024×500 |
+| Gráfico de funciones (español) | `grafico-funciones-1024x500.png` | PNG/JPG 1024×500 |
+| Gráfico de funciones (inglés) | `grafico-funciones-en-1024x500.png` | PNG/JPG 1024×500, para la traducción al inglés |
 | Capturas (español) | `captura-es-*.png` | 2–8 capturas, 1080 px de ancho y unos 1920 de alto |
-| Capturas (inglés) | `captura-en-*.png` | Para la traducción al inglés |
+| Capturas (inglés) | `captura-en-*.png` | Las mismas cuatro que en español, en inglés y tema oscuro (`tests/store.test.js` exige el mismo número) |
 
 Las capturas y el gráfico se generan con `python3 store/generar-material.py` (ver la guía). Son del navegador con la interfaz real, no del APK instalado: si quieres, sustitúyelas por capturas reales de tu móvil.

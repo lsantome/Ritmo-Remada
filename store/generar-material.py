@@ -65,7 +65,7 @@ async def capturas(browser, base):
     # (idioma, prefijo, tema, [(nombre, preparación)])
     casos = [
         ('es-ES', 'es', 'light', ['1-principal', '2-ajustes', '3-modo-pro', '4-borrar-todos']),
-        ('en-US', 'en', 'dark', ['1-main', '2-pro-mode']),
+        ('en-US', 'en', 'dark', ['1-main', '2-settings', '3-pro-mode', '4-clear-all']),
     ]
     for locale, pref, tema, nombres in casos:
         ctx = await browser.new_context(locale=locale, viewport={'width': 412, 'height': 732},
@@ -91,12 +91,12 @@ async def capturas(browser, base):
         for n in nombres:
             if n in ('1-principal', '1-main'):
                 await salir(n)
-            elif n == '2-ajustes':
+            elif n in ('2-ajustes', '2-settings'):
                 await pg.click('#openSettings'); await salir(n)
                 await pg.click('#backBtn')
-            elif n in ('3-modo-pro', '2-pro-mode'):
+            elif n in ('3-modo-pro', '3-pro-mode'):
                 await activar_pro(); await salir(n)
-            elif n == '4-borrar-todos':
+            elif n in ('4-borrar-todos', '4-clear-all'):
                 await pg.locator('#proList').scroll_into_view_if_needed()
                 await pg.locator('#clearIv').scroll_into_view_if_needed(); await salir(n)
         await ctx.close()
