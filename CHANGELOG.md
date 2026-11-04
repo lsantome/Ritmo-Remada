@@ -4,6 +4,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Sin publicar]
 
+### Añadido
+- Capturas de la ficha de Play en inglés de Ajustes y de «Clear all» (`captura-en-2-settings.png`, `captura-en-4-clear-all.png`): el inglés tiene ya las mismas cuatro que el español. `captura-en-2-pro-mode.png` pasa a llamarse `captura-en-3-pro-mode.png`. Una prueba exige el mismo número de capturas en los dos idiomas.
+
 ## [1.6.2] - 2026-11-03
 
 ### Cambiado
